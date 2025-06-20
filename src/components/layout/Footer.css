@@ -1,0 +1,28 @@
+/* Add your footer styles here */
+
+.new_footer {
+  background: #222;
+  color: #fff;
+  padding: 0.5rem 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+.scrolling-text {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: scroll-left 15s linear infinite;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
