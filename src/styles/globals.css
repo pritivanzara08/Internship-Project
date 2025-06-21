@@ -1,61 +1,11 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-header {
-    background: #090909;
-    color: #fff;
-    padding: 10px 20px;
-    align-items: stretch;
-    justify-content: space-between;
-}
-
-nav {
+.explore-buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: space-between;
+    margin-top: 20px;
+    gap: 20px;
 }
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 10px 15px;
-}
-
-nav a:hover {
-    background: #0056b3;
-}
-
-.main-content {
-    padding: 20px;
-}
-
-.product-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin: 10px;
-    text-align: center;
-}
-
-.product-card img {
-    max-width: 100%;
-    height: auto;
-}
-
-.product-card h3 {
-    margin: 10px 0;
-}
-
-.product-card p {
-    color: #007bff;
-    font-weight: bold;
-}
-
-footer {
+.banner {
     background: #333;
     color: #fff;
     text-align: center;
@@ -63,4 +13,38 @@ footer {
     position: relative;
     bottom: 0;
     width: 100%;
+}
+.banner h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+.banner a {
+    color: #fff;
+    text-decoration: none;
+}
+.banner a:hover {
+    text-decoration: underline;
+}
+.banner p {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 6px;
+}
+
+.shopnowbtn {
+    background: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.learnmorebtn {
+    background: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

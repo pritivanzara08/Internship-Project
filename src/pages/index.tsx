@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProductList from "../components/product/ProductList";
+import '../styles/globals.css'; // Ensure this path is correct based on your project structure
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,14 +15,14 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="main-container">
       {/* Hero Section */}
-      <section className="text-center mb-10">
-        <h1 className="text-5xl font-extrabold mb-2 text-blue-700">Welcome to the E-commerce Storefront</h1>
+      <section className="banner">
+        <h1>Welcome to the E-commerce Storefront</h1>
         <p className="text-lg text-gray-500 mb-6">Find the best customized gifts and products here!</p>
-        <div className="flex justify-center gap-4">
-          <button className="bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600 transition">Shop Now</button>
-          <button className="bg-gray-200 text-gray-800 px-6 py-2 rounded shadow hover:bg-gray-300 transition">Learn More</button>
+        <div className="explore-buttons">
+          <button className="shopnowbtn">Shop Now</button>
+          <button className="learnmorebtn">Learn More</button>
         </div>
       </section>
       
@@ -47,33 +48,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Search and Filter */}
-      <section className="mb-10">
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="w-full md:w-1/2 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-            className="w-full md:w-1/4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Categories</option>
-            <option value="leditems">LED Items</option>
-            <option value="photoframes">Photo Frame</option>
-            <option value="hampers">Hampers</option>
-            <option value="giftcards">Gift Cards</option>
-            <option value="customitems">Custom Items</option>
-            <option value="kidsitems">Kids Items</option>
-          </select>
-        </div>
-      </section>
-
       {/* Product List */}
       <main>
         <ProductList searchQuery={searchQuery} category={selectedCategory} />

@@ -7,6 +7,7 @@ import { FaShoppingCart, FaUser } from 'react-icons/fa';
 const Header: React.FC = () => {
   const [search, setSearch] = useState('');
   const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,6 +15,10 @@ const Header: React.FC = () => {
         router.push(`/search?query=${encodeURIComponent(search)}`);
     }
   };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedCategory(e.target.value);
+    };
 
   return (
     <header className="header">
@@ -29,9 +34,24 @@ const Header: React.FC = () => {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search products / Categories..."
+                    placeholder="Search For Gifts....."
                     className="header-search-input"
                 />
+                <select
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                    className="w-full md:w-1/4 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Categories</option>
+                    <option value="birthdayitems">Birthday</option>
+                    <option value="anniversaryitems">Anniversary</option>
+                    <option value="leditems">LED Items</option>
+                    <option value="photoframes">Photo Frame</option>
+                    <option value="hampers">Hampers</option>
+                    <option value="giftcards">Gift Cards</option>
+                    <option value="keychain">Keychain</option>
+                    <option value="festiveitems">Festivals</option>
+                    <option value="weddingitems">Wedding</option>
+                </select>
                 <button
                     type="submit"
                     className="header-search-btn"
@@ -48,7 +68,7 @@ const Header: React.FC = () => {
                 <Link href="/cart" className="header-cart-link">
                     {/* Cart Icon */}
                     <FaShoppingCart className="header-cart-icon" />
-
+                    Cart
                 </Link>
             </div>
         </div>

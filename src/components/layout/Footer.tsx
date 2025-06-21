@@ -1,21 +1,25 @@
 import React from 'react';
 import './Footer.css';
+import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 const Footer: React.FC = () => (
   <footer className="new_footer text-center fixed-bottom">
-    <h5 style={{ color: 'white' }}>
+    <h5 className="footer-text">
       <span className="scrolling-text">
         @2025 Customized Gifts. All rights reserved. | Designed by Priti Vanzara
       </span>
     </h5>
     <div className="social-icons">
-      <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+      <a className="facebook-link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+        <FaFacebook className="social-icon-facebook" />
         Facebook
       </a>
-      <a href="https://www.whatsapp.com" target="_blank" rel="noopener noreferrer">
+      <a className="whatsapp-link" href="https://www.whatsapp.com" target="_blank" rel="noopener noreferrer">
+        <FaWhatsapp className="social-icon-whatsapp" />
         WhatsApp
       </a>
-      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+      <a className="instagram-link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <FaInstagram className="social-icon-instagram" />
         Instagram
       </a>
     </div>
