@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Product } from "../../types";
 import ProductCard from "./ProductCard";
+import productsData from "../../data/products"; // Adjust the import path as necessary
+import "../../styles/ProductStyles.css"; // Adjust the path as necessary
 
 /* Removed local Product type to avoid conflict with imported Product type */
 
@@ -9,21 +11,14 @@ type ProductListProps = {
   category: string;
 };
 
-const MOCK_PRODUCTS: Product[] = [
-  { id: "1", name: "LED Photo Frame", title: "LED Photo Frame", description: "A beautiful LED photo frame.", price: 300, imageUrl: "./images/photo-frame.jpg", categoryId: "photoframes" },
-  { id: "2", name: "Gift Hamper", title: "Gift Hamper", description: "A delightful gift hamper.", price: 500, imageUrl: "./images/hamper.jpg", categoryId: "hampers" },
-  // ...add more products as needed
-];
-
 const ProductList = ({ searchQuery, category }: ProductListProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-//   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
-      setProducts(MOCK_PRODUCTS);
+      setProducts(productsData);
       setLoading(false);
     }, 500); // Simulating a network delay
   }, []);
@@ -40,12 +35,12 @@ const ProductList = ({ searchQuery, category }: ProductListProps) => {
     if (error) return <div>{error}</div>;
 
   return (
-   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+   <div className="product-grid">
       {filteredProducts.length === 0 ? (
         <div>No products found.</div>
       ) : (
         filteredProducts.map((product) => (
-          <ProductCard image={""} key={product.id} {...product} />
+          <ProductCard key={product.id} {...product} />
         ))
       )}
     </div>

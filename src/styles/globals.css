@@ -1,50 +1,99 @@
-.explore-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: space-between;
-    margin-top: 20px;
-    gap: 20px;
-}
-.banner {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-.banner h2 {
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-}
-.banner a {
-    color: #fff;
-    text-decoration: none;
-}
-.banner a:hover {
-    text-decoration: underline;
-}
-.banner p {
-    text-align: center;
-    font-size: 1rem;
-    margin-bottom: 6px;
+/* styles/Home.css */
+
+.home-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.shopnowbtn {
-    background: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.hero-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(to right, #fceabb, #f8b500);
+  color: #333;
+  border-radius: 12px;
+  margin-bottom: 3rem;
 }
 
-.learnmorebtn {
-    background: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons button {
+  margin: 0 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.shop-now-btn {
+  background-color: #1d4ed8;
+  color: white;
+}
+
+.shop-now-btn:hover {
+  background-color: #2563eb;
+}
+
+.learn-more-btn {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.learn-more-btn:hover {
+  background-color: #d1d5db;
+}
+
+.featured-section {
+  margin: 3rem 0;
+}
+
+.featured-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.featured-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+
+.product-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.product-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-card p {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.product-card button {
+  background-color: #1d4ed8;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 }

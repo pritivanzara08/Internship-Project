@@ -61,14 +61,13 @@ const Header: React.FC = () => {
             </form>
             {/* Login & Cart */}
             <div className="header-icons">
+                <Link href="/cart" className="header-cart-link">
+                    <FaShoppingCart className="header-cart-icon" />
+                    Cart
+                </Link>
                 <Link href="/login" className="header-login-link">
                     <FaUser className="header-login-icon" />
                     Login
-                </Link>
-                <Link href="/cart" className="header-cart-link">
-                    {/* Cart Icon */}
-                    <FaShoppingCart className="header-cart-icon" />
-                    Cart
                 </Link>
             </div>
         </div>

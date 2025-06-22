@@ -1,21 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import '../../styles/ProductStyles.css'; // Adjust the path as necessary
 
 interface ProductCardProps {
-    image?: string;
-    title: string;
+    id: string;
+    name: string;
     price: number;
+    imageUrl: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ image, title, price }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ name, price, imageUrl }) => {
     return (
         <div className="product-card">
-            {image ? (
-            <img src={image} alt={title} className="product-image" />
-            ) : (
-            <div className="product-image-placeholder">No Image Available</div>
-            )}
-            <h3 className="product-title">{title}</h3>
-            <p className="product-price">${price.toFixed(2)}</p>
+            <img src={imageUrl} alt={name} className="product-image" />
+            <h3>{name}</h3>
+            <p className="price">${price}</p>
+            <button>View</button>
         </div>
     );
 };

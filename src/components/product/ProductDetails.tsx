@@ -1,12 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchProductDetails } from '../../utils/api';
-import './ProductDetail.css';
+import '../../styles/ProductStyles.css';
 
 type Product = {
     id: string;
     title: string;
-    image: string;
+    imageUrl: string;
     description: string;
     price: number;
 };
@@ -45,13 +45,13 @@ const ProductDetail = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="product-detail">
+        <div className="product-details">
             {product && (
                 <>
                     <h1>{product.title}</h1>
-                    <img src={product.image} alt={product.title} />
+                    <img src={product.imageUrl} alt={product.title} />
                     <p>{product.description}</p>
-                    <h2>Price: ${product.price}</h2>
+                    <h2 className="price">₹{product.price}</h2>
                     <button>Add to Cart</button>
                 </>
             )}
