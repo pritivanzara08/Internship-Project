@@ -36,7 +36,7 @@ const toggleDropdown = (category: string) => {
             <Link href="/">
             <div className="header-logo-section">
                 <img src="/images/logo.png" alt="Logo" className="header-logo" />
-                <span className="header-title">Gift Article</span>
+                {/* <span className="header-title">Gift Article</span> */}
             </div>
             </Link>
             {/* Search Bar */}

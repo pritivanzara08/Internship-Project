@@ -13,7 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, imageUrl, ti
         <div className="product-card">
             <img src={imageUrl} alt={name} className="product-image" />
             <h3>{name}</h3>
-            <p className="price">${price}</p>
+            <p className="price">₹ {price}</p>
             <div className="product-actions">
                 <Link href={`/product/${id}`}>
                 <button className="view-btn">View</button>

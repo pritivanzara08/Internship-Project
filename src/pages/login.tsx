@@ -24,7 +24,8 @@ const Login: React.FC = () => {
     <div className="auth-wrapper">
       <form onSubmit={handleSignup} className="auth-form">
         <img src="/images/logo.png" alt="Logo" className="logo-img" />
-        <h2 className="auth-title">Create a New Account</h2>
+        <h2 className="auth-title">Sign Up/Login to <br></br>Gift-Article!</h2>
+        <p className="auth-subtitle">Create an account or login to continue</p>
 
         {error && <div className="auth-error">{error}</div>}
 
