@@ -1,21 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import '../../styles/ProductStyles.css'; // Adjust the path as necessary
+import Link from 'next/link';
+import { Product } from '../../types';
+import '../../styles/ProductStyles.css';
 
-interface ProductCardProps {
-    id: string;
-    name: string;
-    price: number;
-    imageUrl: string;
+interface ProductCardProps extends Product {
+    onAddToCart: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ name, price, imageUrl }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, imageUrl, title, description, categoryId,onAddToCart }) => {
+    const product: Product = { id, name, price, imageUrl, title, description, categoryId };
     return (
         <div className="product-card">
             <img src={imageUrl} alt={name} className="product-image" />
             <h3>{name}</h3>
             <p className="price">${price}</p>
-            <button>View</button>
+            <div className="product-actions">
+                <Link href={`/product/${id}`}>
+                <button className="view-btn">View</button>
+                </Link>
+                <button className="add-btn" onClick={() => onAddToCart(product)} >
+                Add to Cart
+                </button>
+            </div>
         </div>
     );
 };

@@ -18,8 +18,8 @@ export default function Home() {
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section">
-        <h1 className="hero-title">Welcome to the E-commerce Storefront</h1>
-        <p className="hero-subtitle">Find the best customized gifts and products here!</p>
+        <h1 className="hero-title">Welcome to the Gift-Article Store</h1>
+        <p className="hero-subtitle">Find the best customized gifts and products for your special ones!</p>
         <div className="hero-buttons">
           <button className="shop-now-btn">Shop Now</button>
           <button className="learn-more-btn">Learn More</button>

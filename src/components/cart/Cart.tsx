@@ -1,16 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CartItem from "./CartItem";
 import CartSummary from "./CartSummary";
+import { useRouter } from "next/router";
+import '../../styles/cart.css'; // Adjust the path as necessary
 
 type CartItemType = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
+  imageUrl: string;
 };
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const router = useRouter();
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      const parsed = JSON.parse(savedCart);
+      console.log("Loaded Cart Items:", parsed);
+      setCartItems(parsed);
+    }
+  }, []);
+
+  // Save to localStorage when cart changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (product: CartItemType) => {
     setCartItems((prevItems) => {
@@ -26,26 +45,52 @@ export default function Cart() {
     });
   };
 
-  const removeFromCart = (productId: number) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
+  const removeFromCart = (id: string) => {
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+    
+  const handleCheckout = () => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      router.push("/login?redirect=/checkout");
+    } else {
+      router.push("/checkout");
+    }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold">Shopping Cart</h2>
-      <ul>
-        {cartItems.map((item) => (
-          <CartItem
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            price={item.price}
-            quantity={item.quantity}
-            onRemove={removeFromCart}
-          />
-        ))}
-      </ul>
-      <CartSummary cartItems={cartItems} />
+    <div className="cart-container">
+      <h2 className="cart-title">Shopping Cart</h2>
+      {cartItems.length === 0 ? (
+        <p className="cart-empty">Your cart is empty.</p>
+      ) : (
+        <>
+          <ul>
+            {cartItems.map((item) => (
+              <CartItem
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                price={item.price}
+                quantity={item.quantity}
+                imageUrl={item.imageUrl}
+                onRemove={removeFromCart}
+              />
+            ))}
+          </ul>
+          <CartSummary cartItems={cartItems} />
+          <div className="text-right mt-4">
+            <button
+              onClick={handleCheckout}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Proceed to Checkout
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

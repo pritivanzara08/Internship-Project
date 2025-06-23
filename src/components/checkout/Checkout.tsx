@@ -1,10 +1,21 @@
-// Example Checkout component
-import React from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import PaymentForm from './PaymentForm';
 
-const Checkout: React.FC = () => {
+const Checkout = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      router.push('/login?redirect=/checkout');
+    }
+  }, []);
+
   return (
     <div>
-      Checkout Page
+      <h2>Checkout</h2>
+      <PaymentForm />
     </div>
   );
 };
