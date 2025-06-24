@@ -1,8 +1,8 @@
-import React , {useState} from 'react';
 import Link from 'next/link';
-import './Header.css'; // If using CSS modules, see note below
 import { useRouter } from 'next/router';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaShoppingCart } from 'react-icons/fa';
+import './Header.css'; // If using CSS modules, see note below
 
 const Header: React.FC = () => {
 const [search, setSearch] = useState('');
@@ -72,14 +72,16 @@ const toggleDropdown = (category: string) => {
             </form>
             {/* Login & Cart */}
             <div className="header-icons">
-                <Link href="/cart" className="header-cart-link">
-                    <FaShoppingCart className="header-cart-icon" />
-                    Cart
+                <Link href="/cart" className="icon-link">
+                    <FaShoppingCart className="icon" />
+                    <span>Cart</span>
                 </Link>
-                <Link href="/login" className="header-login-link">
-                    <FaUser className="header-login-icon" />
-                    Login
-                </Link>
+
+                <div className="auth-links">
+                    <Link href="/login" className="auth-link">Login</Link>
+                    <span className="divider">|</span>
+                    <Link href="/signup" className="auth-link">Signup</Link>
+                </div>
             </div>
         </div>
         <div className="header-nav-container">

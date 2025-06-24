@@ -21,11 +21,11 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="auth-wrapper">
+    <div className="auth-wrapper login-bg">
       <form onSubmit={handleSignup} className="auth-form">
         <img src="/images/logo.png" alt="Logo" className="logo-img" />
-        <h2 className="auth-title">Sign Up/Login to <br></br>Gift-Article!</h2>
-        <p className="auth-subtitle">Create an account or login to continue</p>
+        <h2 className="auth-title">Login to Gift-Article!</h2>
+        <p className="auth-subtitle">Access your account and continue shopping</p>
 
         {error && <div className="auth-error">{error}</div>}
 
@@ -53,6 +53,9 @@ const Login: React.FC = () => {
 
         <button type="submit" className="auth-button">Sign Up</button>
 
+        <p className="auth-switch">
+          New here? <a href="/signup">Create an account</a>
+        </p>
         <p className="auth-switch">
           Already have an account? <a href="/login">Login</a>
         </p>

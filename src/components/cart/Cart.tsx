@@ -84,7 +84,7 @@ export default function Cart() {
           <div className="text-right mt-4">
             <button
               onClick={handleCheckout}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="cart-checkout-btn"
             >
               Proceed to Checkout
             </button>

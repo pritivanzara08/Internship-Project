@@ -111,21 +111,21 @@ body {
   font-size: 1.5rem;
 }
 
-.header-cart-link {
+.icon-link {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #2563eb;
-  font-weight: 500;
+  color: #374151;
+  font-weight: 600;
   text-decoration: none;
   font-size: 1.2rem;
-  transition: color 0.2s;
+  transition: color 0.3s ease;
 }
-.header-cart-link:hover {
-  color: #ff0000;
+.icon-link:hover {
+  color: #2563eb;
 }
 
-.header-cart-icon {
+.icon {
   font-size: 1.5rem;
 }
 
@@ -281,4 +281,20 @@ body {
   .mobile-menu-button {
     display: block;
   }
+}
+
+.auth-link {
+  color: #2563eb;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.divider {
+  padding: 3px;
+  color: #101010;
+  font-weight: 300;
 }

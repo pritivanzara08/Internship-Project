@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ProductList from "../components/product/ProductList";
-import '../styles/globals.css'; // Ensure this path is correct based on your project structure
+import '../styles/globals.css';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");

@@ -21,6 +21,15 @@
   z-index: -1;
 }
 
+.signup-bg {
+  background: linear-gradient(135deg, #ffe6ec, #e0f7ff);
+}
+
+.login-bg {
+  background: rgba(0, 0, 0, 0.6) url('/images/giftbackground.jpg') no-repeat center center;
+  background-size: cover;
+  backdrop-filter: blur(5px);
+}
 
 .auth-form {
   background: #cac9c9;
@@ -44,9 +53,10 @@
 }
 
 .auth-subtitle {
-  font-size: 13px;
+  font-size: 0.95rem;
+  color: #6b7280;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .auth-error {

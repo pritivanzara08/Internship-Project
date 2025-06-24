@@ -103,3 +103,24 @@
   align-items: center;
   gap: 0.5rem;
 }
+
+.cart-checkout-btn {
+  background-color: #2563eb; /* Tailwind blue-600 */
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.cart-checkout-btn:hover {
+  background-color: #1d4ed8; /* Tailwind blue-700 */
+  transform: translateY(-1px);
+}
+
+.cart-checkout-btn:active {
+  transform: scale(0.98);
+}

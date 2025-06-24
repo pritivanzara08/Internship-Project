@@ -43,9 +43,11 @@ try {
 };
 
   return (
-    <div className="auth-wrapper">
+    <div className="auth-wrapper signup-bg">
       <form onSubmit={handleSignup} className="auth-form">
-        <h2 className="auth-title">Create a New Account</h2>
+        <h2 className="auth-title">🎁 Create a New Account</h2>
+        <p className="auth-subtitle">Start gifting joy with Gift-Article!</p>
+
 
         {error && <div className="auth-error">{error}</div>}
 
