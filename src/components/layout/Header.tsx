@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkedAlt, FaPhone, FaShoppingCart, FaSignInAlt, FaTractor, FaTruck } from 'react-icons/fa';
 import './Header.css'; // If using CSS modules, see note below
+import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 const Header: React.FC = () => {
 const [search, setSearch] = useState('');
 const router = useRouter();
 const [selectedCategory, setSelectedCategory] = useState("");
+const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+const [userName, setUserName] = useState<string>('Guest');
 
 const handleSearch = (e: React.FormEvent) => {
 e.preventDefault();
@@ -29,8 +32,58 @@ const toggleDropdown = (category: string) => {
     setOpenDropdown(openDropdown === category ? null : category);
 };
 
+const handleLogout = () => {
+    // Logic to handle user logout
+    setUserLoggedIn(false);
+    setUserName('Guest');
+    // Optionally redirect to home or login page
+    router.push('/');
+};
+
   return (
     <header className="header">
+        <div className="header-top">
+            <div className="header-top-left">
+                <a className="facebook-link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                    <FaFacebook className="social-icon-facebook" />
+                </a>
+                <a className="whatsapp-link" href="https://wa.me/message/V54FWAK6EAIHK1" target="_blank" rel="noopener noreferrer">
+                    <FaWhatsapp className="social-icon-whatsapp" />
+                </a>
+                <a className="instagram-link" href="https://www.instagram.com/_gift_article/" target="_blank" rel="noopener noreferrer">
+                    <FaInstagram className="social-icon-instagram" />
+                </a>
+                <div className='icon-text'>
+                    <FaPhone className="icon" />+91 9054344963
+                </div>
+                <a href='mailto:giftarticle00@gmail.com' className='icon-text'>
+                    <FaEnvelope className='icon' /> giftarticle00@gmail.com
+                </a>
+            </div>
+            <div className="header-top-right">
+                <div className='icon-text'>
+                    <FaMapMarkedAlt className="icon" /> Location: Your City
+                </div>
+                <Link href="/track-order" className='icon-text'>
+                    <FaTruck className="icon" /> Track Order
+                </Link>
+                {userLoggedIn ? (
+                    <div className='user-info'>
+                        <span>Hello, {userName}</span>
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                ):(
+                    <>
+                    <Link href="/login" className='icon-link'>
+                        Login
+                    </Link>
+                    <Link href="/signup" className='icon-link'>
+                        Signup
+                    </Link>
+                </>
+            )}
+            </div>
+        </div>
         <div className="header-container">
             {/* Logo Section */}
             <Link href="/">
