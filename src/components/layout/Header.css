@@ -10,6 +10,85 @@ body {
   z-index: 50;
 }
 
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f8f8f8;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  flex-wrap: wrap;
+}
+
+.header-top-left, .header-top-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.facebook-link, .whatsapp-link, .instagram-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+
+.facebook-link:hover, .whatsapp-link:hover, .instagram-link:hover {
+  transform: scale(1.5);
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.icon {
+  font-size: 16px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info span {
+  font-weight: 600;
+}
+
+.icon-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.icon-link:hover {
+  color: #007bff;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+button:hover {
+  color: #ff0000;
+}
+
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -139,6 +218,15 @@ body {
   .header-search-form {
     margin: 0;
     max-width: none;
+  }
+  .header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-top-left, .header-top-right {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
 @media (max-width: 600px) {
@@ -298,3 +386,4 @@ body {
   color: #101010;
   font-weight: 300;
 }
+
