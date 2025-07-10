@@ -32,7 +32,8 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.6.2",
     "stripe": "^18.2.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "sweetalert2": "^11.22.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

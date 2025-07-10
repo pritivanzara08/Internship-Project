@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ProductList from "../components/product/ProductList";
 import '../styles/globals.css';
+import Link from "next/dist/client/link";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,11 @@ export default function Home() {
           <button className="learn-more-btn">Learn More</button>
         </div>
       </section>
+      <section className="productcatalog">
+        <h2 className="productcatalog-title">Product Catalog</h2>
+        <Link href="/category" className="view-all-btn">View All Products</Link>
+      </section>
+
       {/* Product List */}
       <main>
         <ProductList searchQuery={searchQuery} category={selectedCategory} />
