@@ -1,10 +1,10 @@
 import { auth } from '@/lib/firebase';
-import '@/styles/login.css';
+import '@/styles/signup.css';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import swal from 'sweetalert2';
+
 
 const Signup: React.FC = () => {
   const router = useRouter();
@@ -20,10 +20,14 @@ const Signup: React.FC = () => {
   const [country, setCountry] = useState('');
   const [contactNo, setContactNo] = useState('');
   const [email, setEmail] = useState('');
+  const [emailOtp, setEmailOtp] = useState('');
+  const [emailOtpSent, setEmailOtpSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   //security & otp
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPasswordWarning, setShowPasswordWarning] = useState(false);
   const [otpMethod, setOtpMethod] = useState<string>(''); // 'email' or 'sms'
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
@@ -95,6 +99,55 @@ const Signup: React.FC = () => {
       return;
     }
   }
+
+  // Function to send OTP
+  const sendEmailOtp = () => {
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+    // Save the OTP somewhere (e.g., state, or call your backend to send email)
+    // For demo, we'll just show it in alert:
+    Swal.fire({
+      icon: 'info',
+      title: 'OTP Sent',
+      text: `Your OTP is: ${generatedOtp}`,
+    });
+    // Store OTP for validation (in real app, send email via backend and validate server-side)
+    window.localStorage.setItem('emailOtp', generatedOtp);
+    setEmailOtpSent(true);
+    setIsEmailVerified(false);
+  };
+
+  // Function to verify OTP
+  const verifyEmailOtp = () => {
+    const sentOtp = window.localStorage.getItem('emailOtp');
+    if (emailOtp === sentOtp) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Verified',
+        text: 'Email verified successfully!',
+      });
+      setIsEmailVerified(true);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid OTP',
+        text: 'Please check the OTP and try again.',
+      });
+    }
+  };
+  // Function to show password criteria
+  const showPasswordCriteria = () => {
+    Swal.fire({
+      icon: 'info',
+      title: 'Password Requirements',
+      html: `<ul style="text-align: left;">
+             <li>At least 8 characters</li>
+             <li>One uppercase letter</li>
+             <li>One lowercase letter</li>
+             <li>One number</li>
+           </ul>`,
+      confirmButtonText: 'Ok',
+    });
+  };
   return (
     <div className="signup-wrapper signup-bg">
       <div className="signup-container">
@@ -157,11 +210,11 @@ const Signup: React.FC = () => {
             <input
               id="city"
               type="text"
-            placeholder="City"
-            value={city}
-            onChange={e => setCity(e.target.value)}
-            required
-          />
+              placeholder="City"
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              required
+            />
           </div>
           {/* state */}
           <div className="form-group">
@@ -205,48 +258,76 @@ const Signup: React.FC = () => {
             <input
               id="contactNo"
               type="text"
-            placeholder="Contact Number"
-            value={contactNo}
-            onChange={e => setContactNo(e.target.value)}
-            required
-          />
+              placeholder="Contact Number"
+              value={contactNo}
+              onChange={e => setContactNo(e.target.value)}
+              required
+            />
           </div>
           {/* email */}
+          {/* Email Input */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setIsEmailVerified(false); // Reset verification on email change
+              }}
+              required
+              autoComplete="email"
+              disabled={isEmailVerified}
+            />
           </div>
+
+          {/* Button to send OTP */}
+          {!emailOtpSent && (
+            <button type="button" className="send-otp-button" onClick={sendEmailOtp}>
+              Send OTP to Email
+            </button>
+          )}
+
+          {/* OTP Input Field */}
+          {emailOtpSent && !isEmailVerified && (
+            <div className="otp-section">
+              <label htmlFor="emailOtp">Enter OTP</label>
+              <input
+                id="emailOtp"
+                type="text"
+                placeholder="Enter OTP"
+                value={emailOtp}
+                onChange={(e) => setEmailOtp(e.target.value)}
+              />
+              <button type="button" className="send-otp-button" onClick={verifyEmailOtp}>
+                Verify OTP
+              </button>
+            </div>
+          )}
+
+          {/* Show message or mark email verified */}
+          {isEmailVerified && (
+            <p style={{ color: 'green' }}>Email verified ✅</p>
+          )}
           {/* password */}
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
               id="password"
-              type="password"
-            placeholder="********"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-          />
-          </div>
-          {/* Show Password Checkbox */}
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
-              />
-              Show Password
-            </label>
+              type={showPasswordWarning ? 'text' : 'password'}
+              placeholder="********"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              onFocus={() => setShowPasswordWarning(true)}
+              onBlur={() => setShowPasswordWarning(false)}
+            />
+            {showPasswordWarning && (
+              <div className="password-criteria">
+                <p>Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number.</p>
+              </div>
+            )}
           </div>
           {/* confirmPassword */}
           <div className="form-group">
@@ -256,98 +337,41 @@ const Signup: React.FC = () => {
               type="password"
               placeholder="********"
               value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-          />
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+            />
           </div>
           {/* Show Confirm Password Checkbox */}
           <div className="form-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={showConfirmPassword}
-              onChange={() => setShowConfirmPassword(!showConfirmPassword)}
-            />
-            Show Confirm Password
-          </label>
-          </div>
-          {/* OTP Method */}
-          <div className="form-group">
-              <label>
-                <input
-                  type="radio"
-                  name="otpMethod"
-                  value="email"
-                  checked={otpMethod === 'email'}
-                  onChange={() => {
-                    setOtpMethod('email');
-                    Swal.fire({
-                      icon: 'info',
-                      title: 'OTP Method Selected',
-                      text: "OTP will be sent to your registered email address."
-                    });
-                  }}
-                />
-                Email OTP
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="otpMethod"
-                  value="sms"
-                  checked={otpMethod === 'sms'}
-                  onChange={() => {
-                    setOtpMethod('sms');
-                    Swal.fire({
-                      icon: 'info',
-                      title: 'OTP Method Selected',
-                      text: "OTP will be sent to your registered mobile number."
-                    });
-                  }}
-                />
-                SMS OTP
-              </label>
-          </div>
-          {/* OTP Sent Confirmation */}
-          {otpSent && (
-            <div className="otp-sent-confirmation">
-              <p>OTP has been sent to your {otpMethod}.</p>
-            </div>
-          )}
-          {/* OTP Input */}
-          {otpMethod && (
-            <div className="otp-input">
-              <label htmlFor="otp">OTP</label>
+            <label>
               <input
-                id="otp"
-                type="text"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={e => setOtp(e.target.value)}
-                required
+                type="checkbox"
+                checked={showConfirmPassword}
+                onChange={() => setShowConfirmPassword(!showConfirmPassword)}
               />
-              <button type="button" className="send-otp-button" onClick={() => setOtpSent(true)}>
-                {otpSent ? 'Resend OTP' : 'Send OTP'}
-              </button>
-            </div>
-          )}
+              Show Confirm Password
+            </label>
+          </div>
+
           {/* Referral */}
+          <div className="referral-container">
           <label htmlFor="referral">How did you hear about us?</label>
-          <input
+          <select
             id="referral"
-            type="text"
-            placeholder="Referral Source"
             value={referral}
             onChange={e => setReferral(e.target.value)}
-          />
-          
-          <div className="password-criteria">
-            <p>Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number.</p>
+          >
+            <option value="">Select an option</option>
+            <option value="facebook">Facebook</option>
+            <option value="instagram">Instagram</option>
+            <option value="google">Google</option>
+            <option value="friends">Friends</option>
+            <option value="family">Family</option>
+          </select>
           </div>
-          {/* <div className="otp-criteria">
-            <p>OTP will be sent to your {otpMethod}.</p>
-          </div> */}
+
+
           <button type="submit" className="auth-button">Sign Up</button>
           {/* Auth Switch */}
           <div className="auth-switch">
@@ -356,9 +380,9 @@ const Signup: React.FC = () => {
             </p>
           </div>
         </form>
-        </div>
       </div>
-      );
+    </div>
+  );
 }
 
-      export default Signup;
+export default Signup;
