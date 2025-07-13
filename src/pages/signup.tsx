@@ -13,7 +13,7 @@ const Signup: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
-  const [Landmark, setLandmark] = useState('');
+  const [landmark, setLandmark] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -24,83 +24,24 @@ const Signup: React.FC = () => {
   const [emailOtpSent, setEmailOtpSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
-  //security & otp
+  //password visibility
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPasswordWarning, setShowPasswordWarning] = useState(false);
-  const [otpMethod, setOtpMethod] = useState<string>(''); // 'email' or 'sms'
-  const [otp, setOtp] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
 
   //how did you hear about us
   const [referral, setReferral] = useState('');
-
-  //password visibility
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  //error handling
   const [error, setError] = useState('');
 
-  // Simple validation functions
+  // validation
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePinCode = (pinCode: string) => /^\d{5}(-\d{4})?$/.test(pinCode);
   const validateContactNo = (contactNo: string) => /^\d{10}$/.test(contactNo);
-  const passwordCriteria = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/; // At least 8 characters, one uppercase, one lowercase, one number
-
   const validatePassword = (password: string) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    // Basic field validation
-    if (!firstName || !lastName || !address || !Landmark || !city || !state || !pinCode || !country) {
-      setError("Please fill in all required fields.");
-      return;
-    }
-    // Email validation
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    if (!validatePinCode(pinCode)) {
-      setError("Please enter a valid pin code.");
-      return;
-    }
-    if (!validateContactNo(contactNo)) {
-      setError("Please enter a valid contact number.");
-      return;
-    }
-    if (!otpMethod && !password) {
-      setError("Set password or use OTP method");
-      return;
-    }
-    if (!otpMethod && !passwordCriteria.test(password)) {
-      setError("Password must be at least 8 characters long, contain one uppercase letter,")
-
-      try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        router.push('/login');
-      } catch (err: any) {
-        setError(err.message);
-      }
-    } else if (otpMethod && !otp) {
-      setError("Please enter the OTP sent to your " + otpMethod);
-      return;
-    } else if (otpMethod && otpSent && !otpVerified) {
-      setError("Please verify the OTP sent to your " + otpMethod);
-      return;
-    } else if (password && !validatePassword(password)) {
-      setError("Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number.");
-      return;
-    } else if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-  }
-
-  // Function to send OTP
+  
+  //send OTP
   const sendEmailOtp = () => {
     const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
     // Save the OTP somewhere (e.g., state, or call your backend to send email)
@@ -115,8 +56,8 @@ const Signup: React.FC = () => {
     setEmailOtpSent(true);
     setIsEmailVerified(false);
   };
-
-  // Function to verify OTP
+  
+  //verify OTP
   const verifyEmailOtp = () => {
     const sentOtp = window.localStorage.getItem('emailOtp');
     if (emailOtp === sentOtp) {
@@ -134,31 +75,68 @@ const Signup: React.FC = () => {
       });
     }
   };
-  // Function to show password criteria
-  const showPasswordCriteria = () => {
-    Swal.fire({
-      icon: 'info',
-      title: 'Password Requirements',
-      html: `<ul style="text-align: left;">
-             <li>At least 8 characters</li>
-             <li>One uppercase letter</li>
-             <li>One lowercase letter</li>
-             <li>One number</li>
-           </ul>`,
-      confirmButtonText: 'Ok',
-    });
+
+  //Signup
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    // Basic field validation
+    if (!firstName || !lastName || !address || !landmark || !city || !state || !pinCode || !country) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    // Email validation
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!validatePinCode(pinCode)) {
+      setError("Please enter a valid pin code.");
+      return;
+    }
+    if (!validateContactNo(contactNo)) {
+      setError("Please enter a valid contact number.");
+      return;
+    }
+    if (!isEmailVerified) {
+      setError("Please verify your email before signing up.");
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError("Password must be at least 8 characters, include 1 uppercase, 1 lowercase, and 1 number.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    //firebase registration
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+        Swal.fire({
+          icon: 'success',
+          title: 'SignUp Successful',
+          text: 'Welcome to Gift-Article! Your account has been created successfully.',
+        });
+        router.push('/login');
+      } catch (error: any) {
+       setError(error.message);
+      }
   };
-  return (
+ 
+    
+    return (
     <div className="signup-wrapper signup-bg">
       <div className="signup-container">
         <h2 className="signup-title">🎁 Create a New Account</h2>
         <p className="signup-subtitle">Join us to enjoy secure shopping with Gift-Article!</p>
 
         {error && <div className="error">{error}</div>}
+
         <form onSubmit={handleSignup} className="signup-form">
           <div className="form-group">
             {/* firstName */}
-            <label htmlFor="firstName">First Name</label>
+            <label>First Name</label>
             <input
               id="firstName"
               type="text"
@@ -166,11 +144,11 @@ const Signup: React.FC = () => {
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
               required
-            />
+              />
           </div>
           {/* lastName */}
           <div className="form-group">
-            <label htmlFor="lastName">Last Name</label>
+            <label>Last Name</label>
             <input
               id="lastName"
               type="text"
@@ -178,11 +156,11 @@ const Signup: React.FC = () => {
               value={lastName}
               onChange={e => setLastName(e.target.value)}
               required
-            />
+              />
           </div>
           {/* address */}
           <div className="form-group">
-            <label htmlFor="address">Address</label>
+            <label>Address</label>
             <input
               id="address"
               type="text"
@@ -190,23 +168,23 @@ const Signup: React.FC = () => {
               value={address}
               onChange={e => setAddress(e.target.value)}
               required
-            />
+              />
           </div>
           {/* Landmark */}
           <div className="form-group">
-            <label htmlFor="landmark">Landmark</label>
+            <label>Landmark</label>
             <input
               id="landmark"
               type="text"
               placeholder="Landmark"
-              value={Landmark}
+              value={landmark}
               onChange={e => setLandmark(e.target.value)}
               required
-            />
+              />
           </div>
           {/* city */}
           <div className="form-group">
-            <label htmlFor="city">City</label>
+            <label>City</label>
             <input
               id="city"
               type="text"
@@ -214,11 +192,11 @@ const Signup: React.FC = () => {
               value={city}
               onChange={e => setCity(e.target.value)}
               required
-            />
+              />
           </div>
           {/* state */}
           <div className="form-group">
-            <label htmlFor="state">State</label>
+            <label>State</label>
             <input
               id="state"
               type="text"
@@ -226,11 +204,11 @@ const Signup: React.FC = () => {
               value={state}
               onChange={e => setState(e.target.value)}
               required
-            />
+              />
           </div>
           {/* pinCode */}
           <div className="form-group">
-            <label htmlFor="pinCode">Pin Code</label>
+            <label>Pin Code</label>
             <input
               id="pinCode"
               type="text"
@@ -242,7 +220,7 @@ const Signup: React.FC = () => {
           </div>
           {/* country */}
           <div className="form-group">
-            <label htmlFor="country">Country</label>
+            <label>Country</label>
             <input
               id="country"
               type="text"
@@ -250,11 +228,11 @@ const Signup: React.FC = () => {
               value={country}
               onChange={e => setCountry(e.target.value)}
               required
-            />
+              />
           </div>
           {/* contactNo */}
           <div className="form-group">
-            <label htmlFor="contactNo">Contact Number</label>
+            <label>Contact Number</label>
             <input
               id="contactNo"
               type="text"
@@ -262,25 +240,21 @@ const Signup: React.FC = () => {
               value={contactNo}
               onChange={e => setContactNo(e.target.value)}
               required
-            />
+              />
           </div>
           {/* email */}
-          {/* Email Input */}
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label>Email</label>
             <input
-              id="email"
               type="email"
-              placeholder="you@example.com"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
                 setIsEmailVerified(false); // Reset verification on email change
               }}
-              required
-              autoComplete="email"
               disabled={isEmailVerified}
-            />
+              required
+              />
           </div>
 
           {/* Button to send OTP */}
@@ -293,14 +267,11 @@ const Signup: React.FC = () => {
           {/* OTP Input Field */}
           {emailOtpSent && !isEmailVerified && (
             <div className="otp-section">
-              <label htmlFor="emailOtp">Enter OTP</label>
-              <input
-                id="emailOtp"
-                type="text"
-                placeholder="Enter OTP"
+              <label>Enter OTP</label>
+              <input 
                 value={emailOtp}
                 onChange={(e) => setEmailOtp(e.target.value)}
-              />
+                />
               <button type="button" className="send-otp-button" onClick={verifyEmailOtp}>
                 Verify OTP
               </button>
@@ -313,55 +284,46 @@ const Signup: React.FC = () => {
           )}
           {/* password */}
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label>Password</label>
             <input
-              id="password"
-              type={showPasswordWarning ? 'text' : 'password'}
-              placeholder="********"
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               onFocus={() => setShowPasswordWarning(true)}
               onBlur={() => setShowPasswordWarning(false)}
-            />
-            {showPasswordWarning && (
-              <div className="password-criteria">
-                <p>Password must be at least 8 characters long, contain one uppercase letter, one lowercase letter, and one number.</p>
-              </div>
-            )}
+              required
+              />
           </div>
+            <label>
+              <input type="checkbox" 
+                onChange={() => setShowPassword(!showPassword)} />
+              Show Password
+            </label>
+
           {/* confirmPassword */}
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
+            <label>Confirm Password</label>
             <input
-              id="confirmPassword"
-              type="password"
-              placeholder="********"
+              type={showConfirmPassword ? 'text' : 'password'}
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
               required
-              autoComplete="new-password"
-            />
+              />
           </div>
           {/* Show Confirm Password Checkbox */}
-          <div className="form-group">
             <label>
               <input
                 type="checkbox"
-                checked={showConfirmPassword}
                 onChange={() => setShowConfirmPassword(!showConfirmPassword)}
-              />
+                />
               Show Confirm Password
             </label>
-          </div>
+          
 
           {/* Referral */}
           <div className="referral-container">
-          <label htmlFor="referral">How did you hear about us?</label>
-          <select
-            id="referral"
-            value={referral}
-            onChange={e => setReferral(e.target.value)}
-          >
+          <label>How did you hear about us?</label>
+          <select value={referral} onChange={e => setReferral(e.target.value)}>
             <option value="">Select an option</option>
             <option value="facebook">Facebook</option>
             <option value="instagram">Instagram</option>
@@ -383,6 +345,6 @@ const Signup: React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Signup;
