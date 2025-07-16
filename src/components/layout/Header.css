@@ -85,9 +85,9 @@ button {
   transition: color 0.2s;
 }
 
-button:hover {
+/* button:hover {
   color: #ff0000;
-}
+} */
 
 .header-container {
   max-width: 1200px;

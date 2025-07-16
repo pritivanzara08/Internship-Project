@@ -134,30 +134,32 @@ const Signup: React.FC = () => {
         {error && <div className="error">{error}</div>}
 
         <form onSubmit={handleSignup} className="signup-form">
-          <div className="form-group">
-            {/* firstName */}
-            <label>First Name</label>
-            <input
-              id="firstName"
-              type="text"
-              placeholder="First Name"
-              value={firstName}
-              onChange={e => setFirstName(e.target.value)}
-              required
-              />
-          </div>
-          {/* lastName */}
-          <div className="form-group">
-            <label>Last Name</label>
-            <input
-              id="lastName"
-              type="text"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={e => setLastName(e.target.value)}
-              required
-              />
-          </div>
+          <div className="name-fields">
+            <div className="form-group">
+              {/* firstName */}
+              <label>First Name</label>
+              <input
+                id="firstName"
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                required
+                />
+            </div>
+            {/* lastName */}
+            <div className="form-group">
+              <label>Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                required
+                />
+            </div>
+          </div>  
           {/* address */}
           <div className="form-group">
             <label>Address</label>
@@ -245,24 +247,26 @@ const Signup: React.FC = () => {
           {/* email */}
           <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setIsEmailVerified(false); // Reset verification on email change
-              }}
-              disabled={isEmailVerified}
-              required
-              />
-          </div>
+            <div className="email-input-container">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setIsEmailVerified(false); // Reset verification on email change
+                }}
+                disabled={isEmailVerified}
+                required
+                />
 
-          {/* Button to send OTP */}
-          {!emailOtpSent && (
-            <button type="button" className="send-otp-button" onClick={sendEmailOtp}>
-              Send OTP to Email
-            </button>
-          )}
+            {/* Button to send OTP */}
+            {!emailOtpSent && (
+              <button type="button" className="send-otp-button" onClick={sendEmailOtp}>
+                Send OTP
+              </button>
+            )}
+            </div>
+          </div>
 
           {/* OTP Input Field */}
           {emailOtpSent && !isEmailVerified && (
@@ -294,12 +298,7 @@ const Signup: React.FC = () => {
               required
               />
           </div>
-            <label>
-              <input type="checkbox" 
-                onChange={() => setShowPassword(!showPassword)} />
-              Show Password
-            </label>
-
+          
           {/* confirmPassword */}
           <div className="form-group">
             <label>Confirm Password</label>
