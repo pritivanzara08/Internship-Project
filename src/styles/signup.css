@@ -126,18 +126,42 @@
   margin-bottom: 0.5rem;
 }
 
-.otp-section input {
+.otp-input-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem; 
+  flex-wrap: nowrap; 
+}
+
+.otp-input {
   padding: 0.75rem 1rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   font-size: 1rem;
-  width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 150px; /* or any specific width you prefer */
 }
 
-.otp-section input:focus {
-  border-color: #e91e63;
-  box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.2);
+.otp-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.verify-otp-button {
+  padding: 0.75rem 1.2rem;
+  background-color: #e91e63;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.verify-otp-button:hover {
+  background-color: #c2185b;
 }
 
 .referral-container {
@@ -240,8 +264,7 @@
 .email-input-container {
   display: flex;
   align-items: center;
-  gap: 12px; /* space between label and input */
-  margin-bottom: 10px;
+  gap: 10px; /* space between label and input */
 }
 
 #email {
