@@ -1,10 +1,10 @@
-import { auth } from '@/lib/firebase';
-import '@/styles/signup.css';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import '../styles/signup.css';
 import Swal from 'sweetalert2';
-
+import { auth } from '@/lib/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { sendOtp, verifyOtp } from "../pages/api/otpApi";
 
 const Signup: React.FC = () => {
   const router = useRouter();
@@ -42,37 +42,24 @@ const Signup: React.FC = () => {
   const validatePassword = (password: string) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
 
   //send OTP
-  const sendEmailOtp = () => {
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
-    // Save the OTP somewhere (e.g., state, or call your backend to send email)
-    // For demo, we'll just show it in alert:
-    Swal.fire({
-      icon: 'info',
-      title: 'OTP Sent',
-      text: `Your OTP is: ${generatedOtp}`,
-    });
-    // Store OTP for validation (in real app, send email via backend and validate server-side)
-    window.localStorage.setItem('emailOtp', generatedOtp);
-    setEmailOtpSent(true);
-    setIsEmailVerified(false);
+  const handleSendEmailOtp = async() => {
+    try {
+      await sendOtp(email);
+      Swal.fire({ icon: 'success', title: 'OTP Sent', text: 'Please check your email for the OTP.' });
+      setEmailOtpSent(true);
+    } catch (error: any) {
+      Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+    }
   };
 
   //verify OTP
-  const verifyEmailOtp = () => {
-    const sentOtp = window.localStorage.getItem('emailOtp');
-    if (emailOtp === sentOtp) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Verified',
-        text: 'Email verified successfully!',
-      });
+  const handleVerifyEmailOtp = async () => {
+    try {
+      await verifyOtp(email, emailOtp);
+      Swal.fire({ icon: 'success', title: 'Verified', text: 'Email verified successfully!' });
       setIsEmailVerified(true);
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid OTP',
-        text: 'Please check the OTP and try again.',
-      });
+    } catch (error: any) {
+      Swal.fire({ icon: 'error', title: 'Invalid OTP', text: error.message });
     }
   };
 
@@ -184,41 +171,56 @@ const Signup: React.FC = () => {
               required
             />
           </div>
-          {/* city */}
-          <div className="form-group">
-            <label>City</label>
-            <input
-              id="city"
-              type="text"
-              placeholder="City"
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              required
-            />
-          </div>
-          {/* state */}
-          <div className="form-group">
-            <label>State</label>
-            <input
-              id="state"
-              type="text"
-              placeholder="State"
-              value={state}
-              onChange={e => setState(e.target.value)}
-              required
-            />
-          </div>
-          {/* pinCode */}
-          <div className="form-group">
-            <label>Pin Code</label>
-            <input
-              id="pinCode"
-              type="text"
-              placeholder="Pin Code"
-              value={pinCode}
-              onChange={e => setPinCode(e.target.value)}
-              required
-            />
+          <div className="location-container">
+            {/* city */}
+            <div className="form-group small-field">
+              <label>City</label>
+              <input
+                id="city"
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={(e) => {
+                  if (e.target.value.length <= 30) {
+                    setCity(e.target.value);
+                  }
+                }}
+                required
+              />
+            </div>
+            {/* state */}
+            <div className="form-group small-field">
+              <label>State</label>
+              <input
+                id="state"
+                type="text"
+                placeholder="State"
+                value={state}
+                onChange={(e) => {
+                  if (e.target.value.length <= 30) {
+                    setState(e.target.value);
+                  }
+                }}
+                required
+              />
+            </div>
+            {/* pinCode */}
+            <div className="form-group small-field">
+              <label>Pin Code</label>
+              <input
+                id="pinCode"
+                type="text"
+                placeholder="Pin Code"
+                value={pinCode}
+                onChange={(e) => {
+                  const onlyNumbers = e.target.value.replace(/\D/g, '');
+                  if (onlyNumbers.length <= 6) {
+                    setPinCode(onlyNumbers);
+                  }
+                }}
+                required
+              />
+            </div>
           </div>
           {/* country */}
           <div className="form-group">
@@ -241,6 +243,7 @@ const Signup: React.FC = () => {
               placeholder="Contact Number"
               value={contactNo}
               onChange={e => setContactNo(e.target.value)}
+              maxLength={10}
               required
             />
           </div>
@@ -261,7 +264,7 @@ const Signup: React.FC = () => {
 
               {/* Button to send OTP */}
               {!emailOtpSent && (
-                <button type="button" className="send-otp-button" onClick={sendEmailOtp}>
+                <button type="button" className="send-otp-button" onClick={handleSendEmailOtp}>
                   Send OTP
                 </button>
               )}
@@ -278,7 +281,7 @@ const Signup: React.FC = () => {
                   <button
                     type="button"
                     className="verify-otp-button"
-                    onClick={verifyEmailOtp}
+                    onClick={handleVerifyEmailOtp}
                   >
                     Verify OTP
                   </button>

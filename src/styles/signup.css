@@ -186,7 +186,8 @@
   background-color: #f0f0f0;
   appearance: none; /* Remove default arrow for custom styling */
   cursor: pointer;
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
   transition: border-color 0.2s, box-shadow 0.2s;
   position: relative;
 }
@@ -252,8 +253,15 @@
     padding: 0.75rem;
   }
 
-  .name-fields {
+  .name-fields,
+  .location-container,
+  .email-input-container {
     flex-direction: column;
+  }
+
+  .name-fields,
+  .location-container {
+    flex-wrap: wrap;
   }
 
   #referral {
@@ -287,4 +295,22 @@
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
+}
+
+.location-container {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.small-field input {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 180px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
