@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FaEnvelope, FaMapMarkedAlt, FaPhone, FaShoppingCart, FaTruck } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkedAlt, FaPhone, FaSearch, FaShoppingCart, FaTruck } from 'react-icons/fa';
 import './Header.css'; // If using CSS modules, see note below
 import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
@@ -98,7 +98,7 @@ const Header: React.FC = () => {
                         className="header-search-input"
                     />
                     <button type="submit" className="header-search-btn" aria-label="Search">
-                        Search
+                        <FaSearch /> {/* Search */}
                     </button>
                 </form>
                 {/* Login & Cart */}

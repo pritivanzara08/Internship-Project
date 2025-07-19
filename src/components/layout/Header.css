@@ -151,19 +151,13 @@ button {
 }
 
 .header-search-btn {
+  background: transparent;
   border: none;
-  outline: none;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);;
-  color: #fff;
-  font-weight: 600;
-  padding: 0 28px;
-  border-radius: 0 9999px 9999px 0;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
-}
-.header-search-btn:hover {
-  background: #1e40af;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-link, .dropdown-menu li, .header-search-btn {
