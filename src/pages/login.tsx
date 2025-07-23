@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { loginUser } from '../utils/auth';
 import '../styles/login.css';
+import Link from 'next/link';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -23,7 +24,9 @@ const Login: React.FC = () => {
   return (
     <div className="auth-wrapper login-bg">
       <form onSubmit={handleSignup} className="auth-form">
-        <img src="/images/logo.png" alt="Logo" className="logo-img" />
+        <Link href="/">
+          <img src="/images/logo.png" alt="Logo" className="logo-img"  />
+        </Link>
         <h2 className="auth-title">Login to Gift-Article!</h2>
         <p className="auth-subtitle">Access your account and continue shopping</p>
 

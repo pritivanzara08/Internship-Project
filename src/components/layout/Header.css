@@ -93,7 +93,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   max-width: 1200px;
   padding: 16px 32px;
   background-color: #fff;
@@ -216,15 +216,13 @@ button {
     align-items: stretch;
   }
   .header-search-form {
-    margin: 0;
-    max-width: none;
+    margin: 0 auto;
+    width: 100%;
   }
   .header-top {
-    flex-direction: column;
     align-items: flex-start;
   }
   .header-top-left, .header-top-right {
-    flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
@@ -325,6 +323,11 @@ button {
 
 /* On small screens */
 @media (max-width: 768px) {
+
+  .header-container {
+    padding: 12px 8px;
+  }
+  
   .header-nav {
     display: none;
     flex-direction: column;
@@ -355,11 +358,7 @@ button {
   }
 
   .dropdown-menu {
-    position: static;
     display: none;
-    border: none;
-    box-shadow: none;
-    background-color: #f9f9f9;
   }
 
   .nav-item.dropdown:hover .dropdown-menu {
@@ -368,6 +367,14 @@ button {
 
   .mobile-menu-button {
     display: block;
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 9999;
   }
 }
 

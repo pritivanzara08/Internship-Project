@@ -5,11 +5,12 @@ import Swal from 'sweetalert2';
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { sendOtp, verifyOtp } from "../pages/api/otpApi";
+import Link from 'next/link';
 
 const Signup: React.FC = () => {
   const router = useRouter();
 
-  //customer info states
+  // Customer info states
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -20,29 +21,31 @@ const Signup: React.FC = () => {
   const [country, setCountry] = useState('');
   const [contactNo, setContactNo] = useState('');
   const [email, setEmail] = useState('');
+
+  // OTP states
   const [emailOtp, setEmailOtp] = useState('');
   const [emailOtpSent, setEmailOtpSent] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
 
-  //password visibility
+  // Password states
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPasswordWarning, setShowPasswordWarning] = useState(false);
 
-  //how did you hear about us
+  // Other states
   const [referral, setReferral] = useState('');
   const [error, setError] = useState('');
 
-  // validation
+  // Validation functions
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePinCode = (pinCode: string) => /^\d{5}(-\d{4})?$/.test(pinCode);
   const validateContactNo = (contactNo: string) => /^\d{10}$/.test(contactNo);
   const validatePassword = (password: string) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password);
 
-  //send OTP
-  const handleSendEmailOtp = async() => {
+  // Send OTP handler
+  const handleSendEmailOtp = async () => {
     try {
       await sendOtp(email);
       Swal.fire({ icon: 'success', title: 'OTP Sent', text: 'Please check your email for the OTP.' });
@@ -52,7 +55,7 @@ const Signup: React.FC = () => {
     }
   };
 
-  //verify OTP
+  // Verify OTP handler
   const handleVerifyEmailOtp = async () => {
     try {
       await verifyOtp(email, emailOtp);
@@ -63,16 +66,16 @@ const Signup: React.FC = () => {
     }
   };
 
-  //Signup
+  // Signup handler
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     // Basic field validation
     if (!firstName || !lastName || !address || !landmark || !city || !state || !pinCode || !country) {
       setError("Please fill in all required fields.");
       return;
     }
-    // Email validation
     if (!validateEmail(email)) {
       setError("Please enter a valid email address.");
       return;
@@ -97,7 +100,8 @@ const Signup: React.FC = () => {
       setError("Passwords do not match.");
       return;
     }
-    //firebase registration
+
+    // Firebase registration
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       Swal.fire({
@@ -111,19 +115,21 @@ const Signup: React.FC = () => {
     }
   };
 
-
   return (
     <div className="signup-wrapper signup-bg">
       <div className="signup-container">
+        <Link href="/">
+          <img src="/images/logo.png" alt="Logo" className="logo-img" />
+        </Link>
         <h2 className="signup-title">🎁 Create a New Account</h2>
         <p className="signup-subtitle">Join us to enjoy secure shopping with Gift-Article!</p>
 
         {error && <div className="error">{error}</div>}
 
         <form onSubmit={handleSignup} className="signup-form">
+          {/* Name Fields */}
           <div className="name-fields">
             <div className="form-group">
-              {/* firstName */}
               <label>First Name</label>
               <input
                 id="firstName"
@@ -134,7 +140,6 @@ const Signup: React.FC = () => {
                 required
               />
             </div>
-            {/* lastName */}
             <div className="form-group">
               <label>Last Name</label>
               <input
@@ -147,19 +152,19 @@ const Signup: React.FC = () => {
               />
             </div>
           </div>
-          {/* address */}
+
+          {/* Address Fields */}
           <div className="form-group">
             <label>Address</label>
             <input
               id="address"
               type="text"
-              placeholder="address"
+              placeholder="Address"
               value={address}
               onChange={e => setAddress(e.target.value)}
               required
             />
           </div>
-          {/* Landmark */}
           <div className="form-group">
             <label>Landmark</label>
             <input
@@ -171,8 +176,9 @@ const Signup: React.FC = () => {
               required
             />
           </div>
+
+          {/* Location Fields */}
           <div className="location-container">
-            {/* city */}
             <div className="form-group small-field">
               <label>City</label>
               <input
@@ -180,15 +186,12 @@ const Signup: React.FC = () => {
                 type="text"
                 placeholder="City"
                 value={city}
-                onChange={(e) => {
-                  if (e.target.value.length <= 30) {
-                    setCity(e.target.value);
-                  }
+                onChange={e => {
+                  if (e.target.value.length <= 30) setCity(e.target.value);
                 }}
                 required
               />
             </div>
-            {/* state */}
             <div className="form-group small-field">
               <label>State</label>
               <input
@@ -196,15 +199,12 @@ const Signup: React.FC = () => {
                 type="text"
                 placeholder="State"
                 value={state}
-                onChange={(e) => {
-                  if (e.target.value.length <= 30) {
-                    setState(e.target.value);
-                  }
+                onChange={e => {
+                  if (e.target.value.length <= 30) setState(e.target.value);
                 }}
                 required
               />
             </div>
-            {/* pinCode */}
             <div className="form-group small-field">
               <label>Pin Code</label>
               <input
@@ -212,17 +212,16 @@ const Signup: React.FC = () => {
                 type="text"
                 placeholder="Pin Code"
                 value={pinCode}
-                onChange={(e) => {
+                onChange={e => {
                   const onlyNumbers = e.target.value.replace(/\D/g, '');
-                  if (onlyNumbers.length <= 6) {
-                    setPinCode(onlyNumbers);
-                  }
+                  if (onlyNumbers.length <= 6) setPinCode(onlyNumbers);
                 }}
                 required
               />
             </div>
           </div>
-          {/* country */}
+
+          {/* Country & Contact */}
           <div className="form-group">
             <label>Country</label>
             <input
@@ -234,7 +233,6 @@ const Signup: React.FC = () => {
               required
             />
           </div>
-          {/* contactNo */}
           <div className="form-group">
             <label>Contact Number</label>
             <input
@@ -247,34 +245,32 @@ const Signup: React.FC = () => {
               required
             />
           </div>
-          {/* email */}
+
+          {/* Email & OTP */}
           <div className="form-group">
             <label>Email</label>
             <div className="email-input-container">
               <input
                 type="email"
                 value={email}
-                onChange={(e) => {
+                onChange={e => {
                   setEmail(e.target.value);
-                  setIsEmailVerified(false); // Reset verification on email change
+                  setIsEmailVerified(false);
                 }}
                 disabled={isEmailVerified}
                 required
               />
-
-              {/* Button to send OTP */}
               {!emailOtpSent && (
                 <button type="button" className="send-otp-button" onClick={handleSendEmailOtp}>
                   Send OTP
                 </button>
               )}
-              {/* OTP inputs and button - only when OTP is sent */}
               {emailOtpSent && !isEmailVerified && (
                 <>
                   <input
                     id="otp-input"
                     value={emailOtp}
-                    onChange={(e) => setEmailOtp(e.target.value)}
+                    onChange={e => setEmailOtp(e.target.value)}
                     className="otp-input"
                     placeholder="Enter OTP"
                   />
@@ -289,12 +285,11 @@ const Signup: React.FC = () => {
               )}
             </div>
           </div>
-
-          {/* Show message or mark email verified */}
           {isEmailVerified && (
             <p style={{ color: 'green' }}>Email verified ✅</p>
           )}
-          {/* password */}
+
+          {/* Password Fields */}
           <div className="form-group">
             <label>Password</label>
             <input
@@ -306,8 +301,6 @@ const Signup: React.FC = () => {
               required
             />
           </div>
-
-          {/* confirmPassword */}
           <div className="form-group">
             <label>Confirm Password</label>
             <input
@@ -317,7 +310,6 @@ const Signup: React.FC = () => {
               required
             />
           </div>
-          {/* Show Confirm Password Checkbox */}
           <label>
             <input
               type="checkbox"
@@ -325,7 +317,6 @@ const Signup: React.FC = () => {
             />
             Show Confirm Password
           </label>
-
 
           {/* Referral */}
           <div className="referral-container">
@@ -340,9 +331,8 @@ const Signup: React.FC = () => {
             </select>
           </div>
 
-
+          {/* Submit & Auth Switch */}
           <button type="submit" className="auth-button">Sign Up</button>
-          {/* Auth Switch */}
           <div className="auth-switch">
             <p>
               Already have an account? <a href="/login">Login</a>
