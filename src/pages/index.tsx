@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ProductList from "../components/product/ProductList";
 import '../styles/globals.css';
 import Link from "next/dist/client/link";
+import AboutUs from "@/components/AboutUs";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,15 +28,56 @@ export default function Home() {
           <button className="learn-more-btn">Learn More</button>
         </div>
       </section>
-      <section className="productcatalog">
-        <h2 className="productcatalog-title">Product Catalog</h2>
-        <Link href="/category" className="view-all-btn">View All Products</Link>
+      {/* 2. Category / Catalogue */}
+      <section id="categories" className="category-section">
+        <h2>Product Categories</h2>
+        {/* Add category filters or links here */}
+        <Link href="#products">View Product Catalog</Link>
       </section>
 
-      {/* Product List */}
-      <main>
+      {/* 3. Products */}
+      <section id="products" className="product-list-section">
+        <h2>Our Products</h2>
         <ProductList searchQuery={searchQuery} category={selectedCategory} />
-      </main>
+      </section>
+
+      {/* 4. About Us */}
+      <section id="about-us" className="about-section">
+        <AboutUs />
+      </section>
+
+      {/* 5. Gallery */}
+      {/* <section id="gallery" className="gallery-section">
+        <Gallery />
+      </section> */}
+
+      {/* 6. Testimonials */}
+      {/* <section id="testimonials" className="testimonials-section">
+        <Testimonials />
+      </section> */}
+
+      {/* 7. Contact Us */}
+      {/* <section id="contact" className="contact-section">
+        <ContactUs />
+      </section> */}
+
+      {/* 8. Inquiry Form */}
+      {/* <section id="inquiry" className="inquiry-section">
+        <InquiryForm />
+      </section> */}
+
+      {/* 9. Location Map */}
+      {/* <section id="location" className="location-section">
+        <LocationMap />
+      </section> */}
+
+      {/* 10. Useful Links / Footer Links */}
+      {/* <section id="useful-links" className="useful-links-section">
+        <UsefulLinks />
+      </section> */}
+
+      {/* 11. Footer */}
+      <Footer />
     </div>
   );
 }
