@@ -1,0 +1,162 @@
+  /* Contact Us Section */
+.contactUsSection {
+  padding: 40px 0;
+  background-color: #f0f0f0;
+  text-align: center;
+}
+.contactUsGrid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+.contactUsItem {
+  background: transparent; /* Remove box background */
+  border-radius: 0; /* Remove border radius */
+  box-shadow: none; /* Remove box shadow */
+  padding: 25px 30px;
+  min-width: 220px;
+  max-width: 260px;
+  flex: 1 1 220px;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  position: relative;
+}
+.contactUsItem h3 {
+  margin-bottom: 15px;
+  color: #000000;
+}
+.contactIconCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.contactUsItem:hover .contactIconCircle {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.contactUsItem:hover {
+  background: rgba(255, 255, 255, 0.15); /* Subtle white overlay on hover */
+  box-shadow: 0 4px 24px rgba(108, 99, 255, 0.1); /* Soft shadow on hover */
+  border-radius: 16px;
+  transform: translateY(-6px) scale(1.03);
+  z-index: 1;
+}
+
+/* Contact and Inquiry Styles */
+
+.inquiry-form-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.inquiry-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Style for the row of first three inputs */
+.row-inputs {
+  display: flex;
+  gap: 20px; /* space between input groups */
+  width: 100%; /* full width of form container */
+  justify-content: center;
+  flex-wrap: wrap; /* allow wrapping on smaller screens */
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* equally distribute space */
+  min-width: 150px; /* minimum width for input groups */
+}
+.full-width {
+  width: 100%; /* ensures message spans full width */
+  margin-top: 20px; /* spacing above message textarea */
+}
+/* Style textarea to take full width */
+#message {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+  height: 60px;
+}
+
+/* Style inputs for consistency */
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form-group textarea {
+  height: 100px; /* or any desired height */
+}
+
+.inquiry-form label {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.inquiry-form input,
+.inquiry-form textarea {
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 350px;
+}
+
+.inquiry-form textarea {
+  resize: none;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(199, 146, 160);
+  color: white;
+  cursor: pointer;
+  align-self: center;
+  font-size: 16px;
+}
+
+.submit-button:hover {
+  background-color: rgb(146, 49, 75);
+}
+
+/* Responsive adjustments using media queries */
+@media (max-width: 768px) {
+  /* For tablets and smaller devices */
+  .row-inputs {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-group {
+    width: 80%; /* Make input groups wider for small screens */
+    min-width: unset; /* Remove min-width constraint */
+  }
+
+  /* Optional: Reduce font sizes for smaller screens for better fit */
+  .submit-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+/* Contact Us Section */

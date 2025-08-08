@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import '../styles/globals.css';
-import Hero from "@/components/sections/Hero";
-import Categories from "@/components/sections/Categories";
 import ProductList from "@/components/product/ProductList";
 import AboutUs from "@/components/sections/AboutUs";
-import Gallery from "@/components/sections/Gallery"
-import Testimonials from "@/components/sections/Testimonials";
+import Categories from "@/components/sections/Categories";
 import ContactUs from "@/components/sections/ContactUs";
-import InquiryForm from "@/components/sections/InquiryForm";
-import LocationMap from "@/components/sections/LocationMap";
+import Gallery from "@/components/sections/Gallery";
+import Hero from "@/components/sections/Hero";
+import Testimonials from "@/components/sections/Testimonials";
 import UsefulLinks from "@/components/sections/UsefulLinks";
+import '../styles/globals.css';
 
 
 export default function Home() {
@@ -27,8 +25,6 @@ export default function Home() {
       <Gallery />
       <Testimonials />
       <ContactUs />
-      <InquiryForm />
-      <LocationMap />
       <UsefulLinks />
     </>
   );
