@@ -9,7 +9,7 @@ const COOKIE_NAME = process.env.JWT_COOKIE_NAME || 'token';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 await dbConnect();
 const cookie = req.headers.cookie || '';
-const token = cookie.split(${COOKIE_NAME}=)[1];
+const token = cookie.split(`${COOKIE_NAME}=`)[1];
 if (!token) return res.status(401).json({ user: null });
 
 try {
@@ -21,4 +21,4 @@ res.json({ user: { id: user._id, email: user.email, role: user.role, name: user.
 console.error(error);
 res.status(401).json({ user: null });
 }
-
+}
