@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import '../styles/signup.css';
-import Swal from 'sweetalert2';
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { sendOtp, verifyOtp } from "../pages/api/otpApi";
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+import { sendOtp, verifyOtp } from "../../pages/api/otpApi";
+import '../styles/signup.css';
 
 const Signup: React.FC = () => {
   const router = useRouter();

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import PaymentForm from './PaymentForm';
+import PaymentForm from '../components/checkout/PaymentForm';
 
 const Checkout = () => {
   const router = useRouter();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Product } from "../../types";
-import ProductCard from "./ProductCard";
+import ProductCard from "../shop/ProductCard";
 import productsData from "../../data/products"; // Adjust the import path as necessary
 import "../../styles/ProductStyles.css"; // Adjust the path as necessary
 

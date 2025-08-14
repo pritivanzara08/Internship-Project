@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchProductDetails } from '../../utils/api';
+import { fetchProductDetails } from '../../lib/api';
 import '../../styles/ProductStyles.css';
 
 type Product = {
