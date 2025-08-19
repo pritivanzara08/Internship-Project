@@ -19,8 +19,8 @@ export default function Home() {
     <>
       {/* Add state handling for search/filter if needed */}
       <Hero />
-      <Categories />
-      <ProductList searchQuery={searchQuery} category={selectedCategory} />
+      <Categories searchQuery={searchQuery} category={selectedCategory} />
+      <ProductList/>
       <AboutUs />
       <Gallery />
       <Testimonials />

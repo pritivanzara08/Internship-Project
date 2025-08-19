@@ -7,20 +7,19 @@ interface ProductCardProps extends Product {
     onAddToCart: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ id, name, price, imageUrl, title, description, categoryId,onAddToCart }) => {
-    const product: Product = { id, name, price, imageUrl, title, description, categoryId };
+const ProductCard: React.FC<ProductCardProps> = ({ id, name, imageUrl, title, description, categoryId,onAddToCart }) => {
     return (
         <div className="product-card">
             <img src={imageUrl} alt={name} className="product-image" />
             <h3>{name}</h3>
-            <p className="price">₹ {price}</p>
+            {/* <p className="price">₹ {price}</p> */}
             <div className="product-actions">
                 <Link href={`/product/${id}`}>
                 <button className="view-btn">View</button>
                 </Link>
-                <button className="add-btn" onClick={() => onAddToCart(product)} >
+                {/* <button className="add-btn" onClick={() => onAddToCart(product)} >
                 Add to Cart
-                </button>
+                </button> */}
             </div>
         </div>
     );

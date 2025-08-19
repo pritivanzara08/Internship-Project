@@ -1,42 +1,45 @@
 import mongoose from 'mongoose';
 
-interface CustomGlobal {
-  mongoose?: {
-	conn: any | null;
-	promise: any | null;
-  };
+type MongooseWithCache = typeof mongoose & {
+  conn: typeof mongoose.connection | null;
+  promise: Promise<typeof mongoose.connection> | null;
+};
+
+declare global {
+  var _mongoose: MongooseWithCache | undefined;
 }
 
-declare const global: CustomGlobal;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-interface CustomGlobalThis extends Global {
-  mongoose?: {
-	conn: any | null;
-	promise: any | null;
-  };
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-declare const globalThis: CustomGlobalThis;
-
-let cached = global.mongoose || (global.mongoose = { conn: null, promise: null });
+let cached = (global as any)._mongoose as MongooseWithCache | undefined;
 
 if (!cached) {
-cached = globalThis.mongoose = { conn: null, promise: null };
+  cached = (global as any)._mongoose = { 
+    conn: null, 
+    promise: null,
+  } as MongooseWithCache;
 }
 
 async function dbConnect() {
-if (cached.conn) {
-return cached.conn;
-}
+  if (cached!.conn) {
+    return cached!.conn;
+  }
 
-if (!cached.promise) {
-const uri = process.env.MONGODB_URI!;
-cached.promise = mongoose.connect(uri, {
-// useNewUrlParser: true, useUnifiedTopology: true are defaults in v6
-});
-}
-cached.conn = await cached.promise;
-return cached.conn;
+  if (!cached!.promise) {
+    if (!MONGODB_URI) {
+      throw new Error('MONGODB_URI is not defined');
+    }
+    cached!.promise = mongoose.connect(MONGODB_URI, {
+      // No need for legacy options in Mongoose 6+
+    } as any) as unknown as Promise<mongoose.Connection>;
+  }
+
+  cached!.conn = await cached!.promise;
+  return cached!.conn;
 }
 
 export default dbConnect;

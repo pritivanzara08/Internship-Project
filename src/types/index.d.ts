@@ -3,14 +3,14 @@ export interface Product {
     id: string;
     title: string;
     description: string;
-    price: number;
     imageUrl: string;
     categoryId: string;
 }
 
-export interface Category {
+export interface ProductCategory {
     id: string;
     name: string;
     description: string;
     products: Product[];
 }
+

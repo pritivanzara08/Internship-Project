@@ -7,7 +7,7 @@ export default function Document() {
       <Head>
         {/* ✅ Google Fonts link */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+          href="/fonts/FontCss2.css"
           rel="stylesheet"
         />
       </Head>
