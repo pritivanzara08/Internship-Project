@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 import ProductList from "@/components/product/ProductList";
-import AboutUs from "@/pages/sections/AboutUs";
-import Categories from "@/pages/sections/Categories";
-import ContactUs from "@/pages/sections/ContactUs";
-import Gallery from "@/pages/sections/Gallery";
-import Hero from "@/pages/sections/Hero";
-import Testimonials from "@/pages/sections/Testimonials";
-import UsefulLinks from "@/pages/sections/UsefulLinks";
-import '../styles/globals.css';
+import AboutUs from "@/components/sections/AboutUs";
+import Categories from "@/components/sections/Categories";
+import ContactUs from "@/components/sections/ContactUs";
+import Gallery from "@/components/sections/Gallery";
+import Hero from "@/components/sections/Hero";
+import Testimonials from "@/components/sections/Testimonials";
+import UsefulLinks from "@/components/sections/UsefulLinks";
+import '@/styles/globals.css';
 
 
 export default function Home() {

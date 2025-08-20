@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { sendOtp, verifyOtp } from "../../pages/api/otpApi";
-import '../styles/signup.css';
+import '@/styles/signup.css';
 
 const Signup: React.FC = () => {
   const router = useRouter();

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { loginUser } from '../../lib/auth';
-import '../styles/login.css';
+import '@/styles/login.css';
 
 const Login: React.FC = () => {
   const router = useRouter();

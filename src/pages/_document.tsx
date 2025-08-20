@@ -7,7 +7,7 @@ export default function Document() {
       <Head>
         {/* ✅ Google Fonts link */}
         <link
-          href="/fonts/FontCss2.css"
+          href="/fonts/fonts.css"
           rel="stylesheet"
         />
       </Head>

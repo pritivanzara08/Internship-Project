@@ -83,7 +83,7 @@
   padding: 2rem 1rem;
 }
 
-.slide-content .beautiful-title {
+.slide-content {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -155,7 +155,7 @@
   .hero-slider {
     height: 300px;
   }
-  .slide-content .beautiful-title {
+  .slide-content {
     font-size: 1.5rem;
   }
   .slide-content .subtitle {
@@ -170,7 +170,7 @@
   .slide-content {
     padding: 1rem 0.3rem;
   }
-  .slide-content .beautiful-title {
+  .slide-content {
     font-size: 1.1rem;
   }
   .slide-content .subtitle {
@@ -506,12 +506,7 @@
     .useful-links-section {
       padding: 1rem 0.5rem;
     }
-
-    .beautiful-title {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-
+    
     .useful-links-grid {
       grid-template-columns: 1fr;
       gap: 1rem;
