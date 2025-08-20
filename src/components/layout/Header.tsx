@@ -50,7 +50,7 @@ const Header: React.FC = () => {
                         <FaInstagram className="social-icon-instagram" />
                     </a>
                     <div className='icon-text'>
-                        <FaPhone className="icon" />+91 9054344963
+                        <FaPhone className="icon" />+91-9054344963
                     </div>
                     <a href='mailto:giftarticle00@gmail.com' className='icon-text'>
                         <FaEnvelope className='icon' /> giftarticle00@gmail.com
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
                 </div>
                 <div className="header-top-right">
                     <div className='icon-text'>
-                        <FaMapMarkedAlt className="icon" /> Location: Your City
+                        <FaMapMarkedAlt className="icon" /> Ahmedabad, India
                     </div>
                     <Link href="/track-order" className='icon-text'>
                         <FaTruck className="icon" /> Track Order
@@ -81,95 +81,50 @@ const Header: React.FC = () => {
                 </div>
             </div>
             <div className="header-container">
-                {/* Logo Section */}
-                <Link href="/">
-                    <div className="header-logo-section">
-                        <img src="/images/logo.png" alt="Logo" className="header-logo" />
-                        {/* <span className="header-title">Gift Article</span> */}
-                    </div>
-                </Link>
-                {/* Search Bar */}
-                <form onSubmit={handleSearch} className="header-search-form">
-                    <input
-                        type="text"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search For Gifts....."
-                        className="header-search-input"
-                    />
-                    <button type="submit" className="header-search-btn" aria-label="Search">
-                        <FaSearch /> {/* Search */}
+                <div className="header-left">
+                    <button className="mobile-menu-button" onClick={toggleMenu}>
+                        ☰
                     </button>
-                </form>
-                {/* Login & Cart */}
-                <div className="header-icons">
-                    <Link href="/cart" className="icon-link">
-                        <FaShoppingCart className="icon" />
-                        <span>Cart</span>
+                    {/* Logo Section */}
+                    <Link href="/">
+                        <div className="header-logo-section">
+                            <img src="/images/logo.png" alt="Logo" className="header-logo" />
+                            <span className="header-title">Gift Article</span>
+                        </div>
                     </Link>
                 </div>
-            </div>
-            <div className="header-nav-container">
-                {/* Mobile Menu Toggle */}
-                <button className="mobile-menu-button" onClick={toggleMenu}>
-                    ☰
-                </button>
                 {/* Dropdown Nav */}
                 <nav className={`header-nav ${menuOpen ? 'open' : ''}`}>
                     <ul className="nav-menu">
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Newly Launched</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/hampers">Hampers</Link></li>
-                                <li><Link href="/giftcards">Gift Cards</Link></li>
-                                <li><Link href="/keychain">Keychain</Link></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Occasions</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/birthdayitems">Birthday</Link></li>
-                                <li><Link href="/anniversaryitems">Anniversary</Link></li>
-                                <li><Link href="/weddingitems">Wedding</Link></li>
-                                <li><Link href="/festiveitems">Festivals</Link></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Photo Gifts</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/photoframes">Photo Frames</Link></li>
-                                <li><Link href="/photo-cushions">Photo Cushions</Link></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Name Gifts</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/name-mugs">Name Mugs</Link></li>
-                                <li><Link href="/name-led">Name LED Lights</Link></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Home</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/">Mug</Link></li>
-                                <li><Link href="/">Cushion</Link></li>
-                            </ul>
-                        </li>
-
-                        <li className="nav-item dropdown">
-                            <span className="nav-link">Fashion & Accessories</span>
-                            <ul className="dropdown-menu">
-                                <li><Link href="/">Earrings</Link></li>
-                                <li><Link href="/">Chain Pendant</Link></li>
-                            </ul>
-                        </li>
-
+                        <li className="nav-item"><a href="/">Home</a></li>
+                        <li className="nav-item"><a href="#products">Products</a></li>
+                        <li className="nav-item"><a href="#testimonials">Reviews</a></li>
+                        <li className="nav-item"><a href="#about-us">About Us</a></li>
+                        <li className="nav-item"><a href="#gallery">Gallery</a></li>
+                        {/* <li className="nav-item"><a href="#faq">FAQ</a></li>
+                        <li className="nav-item"><a href="#terms">Terms & Conditions</a></li> */}
+                        <li className="nav-item"><a href="#inquiry-form">Any Inquiry?</a></li>
                     </ul>
                 </nav>
+                {/* Search Bar */}
+                <div className="header-right">
+                    <form onSubmit={handleSearch} className="header-search-form">
+                        <input
+                            type="text"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search For Gifts....."
+                            className="header-search-input"
+                        />
+                        <button type="submit" className="header-search-btn" aria-label="Search">
+                            <FaSearch />
+                        </button>
+                    </form>
+                    {/* Login & Cart */}
+                    <Link href="/cart" className="icon-link">
+                        <FaShoppingCart className="icon" />
+                    </Link>
+                </div>
             </div>
         </header>
     );

@@ -1,29 +1,30 @@
 import React from 'react';
-import "../../styles/ContactUs.css";
+import "../../styles/theme.css";
 import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 const UsefulLinks = () => {
   return (
     <section className="useful-links-section">
-      <h2 className='beautiful-title'>Useful Links</h2>
-      <div className="useful-links-grid four-columns">
-        <div className="links-group">
-          <h4>Policies & More</h4>
+      <div className='section-container'>
+        <h2 className='beautiful-title'>Useful Links</h2>
+        <div className="useful-links-grid four-columns">
+          <div className="links-group">
+            <h4>Policies & More</h4>
           <ul>
-            <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/categories">Categories</a></li>
-            <li><a href="/about-us">About Us</a></li>
-            <li><a href="/videos">Videos</a></li>
-            <li><a href="/terms">Terms & Conditions</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#about-us">About Us</a></li>
+            <li><a href="#gallery">Videos</a></li>
+            <li><a href="#terms">Terms & Conditions</a></li>
           </ul>
         </div>
         <div className="links-group">
           <h4>Navigate</h4>
           <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/products">Products</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/testimonials">Testimonials</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
           </ul>
         </div>
         <div className="links-group">
@@ -49,6 +50,7 @@ const UsefulLinks = () => {
           </ul>
         </div>
       </div>
+  </div>
     </section>
   );
 };

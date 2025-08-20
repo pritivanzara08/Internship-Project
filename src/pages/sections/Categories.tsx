@@ -52,19 +52,21 @@ const ProductList = ({ searchQuery, category }: ProductListProps) => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="category-list">
-      <h2 className="beautiful-title">Categories</h2>
-      <div className="product-grid">
-        {filteredProducts.length === 0 ? (
-          <div>No products found.</div>
-        ) : (
-          filteredProducts.map((product) => (
-            <ProductCard key={product.id} {...product} onAddToCart={addToCart} />
-          ))
-        )}
+    <section className="categories-section">
+      <div className="section-container">
+        <h2 className="beautiful-title">Categories</h2>
+        <div className="categories-grid">
+          {filteredProducts.length === 0 ? (
+            <div>No products found.</div>
+          ) : (
+            filteredProducts.map((product) => (
+              <ProductCard key={product.id} {...product} onAddToCart={addToCart} />
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-      export default ProductList;
+export default ProductList;

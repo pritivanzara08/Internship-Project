@@ -6,15 +6,8 @@
   margin-bottom: 0.5em;
   letter-spacing: 1px;
   text-shadow: 1px 2px 8px #e1bee7;
-  font-style: italic;
+  font-style: italic ;
   src: url('/fonts/dancing-script.woff2') format('woff2');
-}
-
-.category-list {
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin: 0 auto;
 }
 
 .product-card {
@@ -176,4 +169,139 @@ outline-offset: 2px;
 .view-btn:active {
 transform: translateY(0);
 background: #135aaf;
+}
+
+
+/* Categories Section */
+.categories-section {
+  background: #f0f0f0;
+  padding: 3rem 0;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.beautiful-title {
+  font-family: "Dancing Script", cursive;
+  font-size: 2.2rem;
+  color: #2d2d2d;
+  text-align: center;
+  margin-bottom: 2.2rem;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 8px #e1bee7;
+  font-style: italic;
+  font-weight: 700;
+  border-bottom: 2px solid #fbe9d5;
+  display: inline-block;
+  padding-bottom: 0.3em;
+}
+
+/* Categories Grid */
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* Product Card */
+.product-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(108, 99, 255, 0.07);
+  padding: 1.2rem 1rem 1.5rem 1rem;
+  width: 220px;
+  min-width: 180px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 24px rgba(108, 99, 255, 0.13);
+  transform: translateY(-6px) scale(1.03);
+  z-index: 1;
+}
+
+.product-card img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  background: #fbe9d5;
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.07);
+}
+
+.product-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.product-card-desc {
+  font-size: 0.97rem;
+  color: #666;
+  margin-bottom: 0.7rem;
+  text-align: center;
+}
+
+.product-card-price {
+  font-size: 1.08rem;
+  color: #4361ee;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.product-card .add-to-cart-btn {
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: auto;
+}
+
+.product-card .add-to-cart-btn:hover {
+  background: #2d2d2d;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .categories-grid {
+    gap: 1.2rem;
+  }
+  .product-card {
+    width: 45vw;
+    min-width: 150px;
+    padding: 1rem 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .categories-section {
+    padding: 1.2rem 0;
+  }
+  .categories-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .product-card {
+    width: 95vw;
+    min-width: 0;
+    padding: 1rem 0.5rem;
+  }
 }

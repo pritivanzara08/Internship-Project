@@ -19,13 +19,13 @@ export default function Home() {
     <>
       {/* Add state handling for search/filter if needed */}
       <Hero />
-      <Categories searchQuery={searchQuery} category={selectedCategory} />
-      <ProductList/>
-      <AboutUs />
-      <Gallery />
-      <Testimonials />
-      <ContactUs />
-      <UsefulLinks />
+      <div id="categories"><Categories searchQuery={searchQuery} category={selectedCategory} /></div>
+      <div id="products"><ProductList/></div>
+      <div id="about-us"><AboutUs /></div>
+      <div id="gallery"><Gallery /></div>
+      <div id="testimonials"><Testimonials /></div>
+      <div id="contact-us"><ContactUs /></div>
+      <div id="useful-links"><UsefulLinks /></div>
     </>
   );
 }

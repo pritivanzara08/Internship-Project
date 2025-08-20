@@ -77,7 +77,7 @@ const ContactUs = () => {
         </div>
 
         {/* Inquiry Form */}
-        <div className="inquiry-form-container">
+        <div id="inquiry-form" className="inquiry-form-container">
           <form className="inquiry-form" >
             {/* Row of first three inputs */}
             <div className="row-inputs">
