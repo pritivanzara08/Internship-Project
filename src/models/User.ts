@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from 'mongoose';
 
 export type UserRole = 'admin' | 'customer';
 

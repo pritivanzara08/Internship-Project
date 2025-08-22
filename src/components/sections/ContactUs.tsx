@@ -1,12 +1,12 @@
 import React from "react";
-import "@/styles/ContactUs.css";
+import "@/styles/theme.css";
 import {
   FaClock,
   FaEnvelope,
   FaMapMarkerAlt,
   FaPhoneAlt
 } from "react-icons/fa";
-// const contactRef = useRef(null);
+
 const ContactUs = () => {
   return (
     <section className="contact-us-section">
@@ -77,64 +77,7 @@ const ContactUs = () => {
         </div>
 
         {/* Inquiry Form */}
-        <div id="inquiry-form" className="inquiry-form-container">
-          <form className="inquiry-form" >
-            {/* Row of first three inputs */}
-            <div className="row-inputs">
-              <div className="form-group">
-                {/* <label htmlFor="fullName">Full Name</label> */}
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  placeholder="Full name"
-                  // value={formData.fullName}
-                  // onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                {/* <label htmlFor="email">Email ID</label> */}
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Email"
-                  // value={formData.email}
-                  // onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                {/* <label htmlFor="mobile">Mobile Number</label> */}
-                <input
-                  type="tel"
-                  id="mobile"
-                  name="mobile"
-                  placeholder="Mobile Number"
-                  // value={formData.mobile}
-                  // onChange={handleInputChange}
-                />
-              </div>
-            </div>
-
-            {/* Message textarea spanning full width */}
-            <div className="form-group full-width">
-              {/* <label htmlFor="message">Message</label> */}
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                placeholder="Message"
-                // value={formData.message}
-                // onChange={handleInputChange}
-              ></textarea>
-            </div>
-
-            {/* Submit button centered */}
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
-          </form>
-        </div>
+        
         <div
           style={{
             display: "flex",

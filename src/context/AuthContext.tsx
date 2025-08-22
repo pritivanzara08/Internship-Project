@@ -1,15 +1,5 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  onAuthStateChanged, 
-  signOut, 
-  User as FirebaseUser 
-} from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
-import { app } from '../lib/firebase'; // Adjust the import based on your project structure
 
 interface User {
   uid: string;
@@ -33,66 +23,82 @@ export const useAuth = () => {
   return context;
 };
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-
 export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Signup with role
+  // Signup via Api
   const signup = async (email: string, password: string, role: 'admin' | 'user') => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-
-    // Save role & UID in Firestore
-    await setDoc(doc(db, 'users', firebaseUser.uid), {
-      email,
-      role,
-      uid: firebaseUser.uid,
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password, role }),
     });
-
-    setUser({ uid: firebaseUser.uid, email, role });
-  };
-
-  // Login and fetch role from Firestore
-  const login = async (email: string, password: string) => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
-
-    // Fetch user profile with role
-    const docRef = doc(db, 'users', firebaseUser.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const data = docSnap.data() as User;
-      setUser(data);
-    } else {
-      // If no role saved, default to 'user'
-      setUser({ uid: firebaseUser.uid, email, role: 'user' });
+    if (!res.ok) {
+      throw new Error('Signup failed');
     }
+    const data = await res.json();
+    setUser({ uid: data.uid, email, role: data.role });
   };
 
-  const logout = () => signOut(auth);
-
-  // Keep user state in sync
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        const docRef = doc(db, 'users', firebaseUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data() as User;
-          setUser(data);
-        } else {
-          setUser({ uid: firebaseUser.uid, email: firebaseUser.email, role: 'user' });
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
+  // Login via Api
+  const login = async (email: string, password: string) => {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: 'include',
     });
-    return unsubscribe;
+    if (!res.ok) {
+      throw new Error('Login failed');
+    }
+    const data = await res.json();
+    setUser({ uid: data.uid, email: data.email, role: data.role });
+  };
+
+  //Logout via Api
+  const logout = async () => {
+    const res = await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+    setUser(null);
+  };
+
+  // Hydrate on Load
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchUser = async () => {
+      try{
+        const res = await fetch('/api/auth/user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (mounted && data?.uid){
+          setUser({ uid: data.uid, email: data.email, role: data.role as User['role'] });
+        } 
+      }else {
+          if (mounted) setUser(null);
+        }
+      } catch (error) {
+        if (mounted) setUser(null);
+        console.error('Error fetching user:', error);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    fetchUser();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (

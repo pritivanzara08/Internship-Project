@@ -24,18 +24,20 @@ if (!cached) {
   } as MongooseWithCache;
 }
 
-async function dbConnect() {
+async function dbConnect(): Promise<typeof mongoose.connection> {
   if (cached!.conn) {
     return cached!.conn;
   }
 
   if (!cached!.promise) {
-    if (!MONGODB_URI) {
-      throw new Error('MONGODB_URI is not defined');
-    }
-    cached!.promise = mongoose.connect(MONGODB_URI, {
-      // No need for legacy options in Mongoose 6+
-    } as any) as unknown as Promise<mongoose.Connection>;
+    // Initialize a connection promise to prevent parallel connections
+    cached!.promise = mongoose
+      .connect(MONGODB_URI!, {
+      } as any)
+      .then((mongooseInstance) => {
+        cached!.conn = mongooseInstance.connection;
+        return cached!.conn;
+      });
   }
 
   cached!.conn = await cached!.promise;

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { loginUser } from '../../lib/auth';
+import { loginUser } from '@/lib/auth';
 import '@/styles/login.css';
 
 const Login: React.FC = () => {
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
           autoComplete="new-password"
         />
 
-        <button type="submit" className="auth-button">Sign Up</button>
+        <button type="submit" className="auth-button">Login</button>
 
         <p className="auth-switch">
           New here? <a href="/signup">Create an account</a>

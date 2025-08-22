@@ -1,5 +1,4 @@
-import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -101,32 +100,69 @@ const Signup: React.FC = () => {
       return;
     }
 
-    // Firebase registration
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      Swal.fire({
-        icon: 'success',
-        title: 'SignUp Successful',
-        text: 'Welcome to Gift-Article! Your account has been created successfully.',
-      });
-      router.push('/login');
-    } catch (error: any) {
-      setError(error.message);
-    }
+  // Prepare the payload
+  const payload = {
+    email,
+    password,
+    firstName,
+    lastName,
+    address,
+    landmark,
+    city,
+    state,
+    pinCode,
+    country,
+    contactNo,
+    // include other fields if your backend supports them
   };
 
+    // MongoDB registration via API
+  try {
+    const res = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        address,
+        landmark,
+        city,
+        state,
+        pinCode,
+        country,
+        contactNo,
+        email,
+        password,
+        referral,
+      }),
+    });
+
+    const data = await res.json();
+    if (res.ok) throw new Error(data.message || "Signup failed");
+    Swal.fire({
+      icon: 'success',
+      title: 'SignUp Successful',
+      text: 'Welcome to Gift-Article! Your account has been created successfully.',
+    });
+      router.push('/login');
+    } catch (error: any) {
+    setError(error.message);
+  }
+};
+
   return (
-    <div className="signup-wrapper signup-bg">
+    <div className="signup-wrapper">
       <div className="signup-container">
-        <Link href="/">
-          <img src="/images/logo.png" alt="Logo" className="logo-img" />
-        </Link>
-        <h2 className="signup-title">🎁 Create a New Account</h2>
-        <p className="signup-subtitle">Join us to enjoy secure shopping with Gift-Article!</p>
-
+        <div className="signup-side">
+          <Link href="/">
+            <img src="/images/logo.png" alt="Logo" className="logo-img" />
+          </Link>
+          <h2 className="signup-title">🎁 Create a New Account</h2>
+          <p className="signup-subtitle">Join us to enjoy secure shopping with Gift-Article!</p>
+        </div>
         {error && <div className="error">{error}</div>}
-
         <form onSubmit={handleSignup} className="signup-form">
+
           {/* Name Fields */}
           <div className="name-fields">
             <div className="form-group">
@@ -154,32 +190,30 @@ const Signup: React.FC = () => {
           </div>
 
           {/* Address Fields */}
-          <div className="form-group">
-            <label>Address</label>
-            <input
-              id="address"
-              type="text"
-              placeholder="Address"
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Landmark</label>
-            <input
-              id="landmark"
-              type="text"
-              placeholder="Landmark"
-              value={landmark}
-              onChange={e => setLandmark(e.target.value)}
-              required
-            />
-          </div>
-
-          {/* Location Fields */}
-          <div className="location-container">
-            <div className="form-group small-field">
+            <div className="form-group">
+              <label>Address</label>
+              <input
+                id="address"
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+                required
+              />
+            </div>
+          <div className="name-fields">
+            <div className="form-group">
+              <label>Landmark</label>
+              <input
+                id="landmark"
+                type="text"
+                placeholder="Landmark"
+                value={landmark}
+                onChange={e => setLandmark(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
               <label>City</label>
               <input
                 id="city"
@@ -192,6 +226,10 @@ const Signup: React.FC = () => {
                 required
               />
             </div>
+          </div>
+
+          {/* Location Fields */}
+          <div className="location-container">
             <div className="form-group small-field">
               <label>State</label>
               <input
@@ -219,10 +257,7 @@ const Signup: React.FC = () => {
                 required
               />
             </div>
-          </div>
-
-          {/* Country & Contact */}
-          <div className="form-group">
+            <div className="form-group small-field">
             <label>Country</label>
             <input
               id="country"
@@ -233,6 +268,9 @@ const Signup: React.FC = () => {
               required
             />
           </div>
+          </div>
+
+          {/* Contact */}
           <div className="form-group">
             <label>Contact Number</label>
             <input

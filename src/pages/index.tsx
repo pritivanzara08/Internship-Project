@@ -9,6 +9,7 @@ import Hero from "@/components/sections/Hero";
 import Testimonials from "@/components/sections/Testimonials";
 import UsefulLinks from "@/components/sections/UsefulLinks";
 import '@/styles/globals.css';
+import InquiryFormPage from "./inquiry-form";
 
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
       <div id="gallery"><Gallery /></div>
       <div id="testimonials"><Testimonials /></div>
       <div id="contact-us"><ContactUs /></div>
+      <div id="get-in-touch"><InquiryFormPage /></div>
       <div id="useful-links"><UsefulLinks /></div>
     </>
   );

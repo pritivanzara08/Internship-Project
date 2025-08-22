@@ -134,7 +134,7 @@ const Header: React.FC = () => {
             {/* <li className="nav-item"><a href="#faq">FAQ</a></li>
                         <li className="nav-item"><a href="#terms">Terms & Conditions</a></li> */}
             <li className="nav-item">
-              <a href="#inquiry-form">Any Inquiry?</a>
+              <Link href="/inquiry-form">Any Inquiry?</Link>
             </li>
           </ul>
         </nav>
