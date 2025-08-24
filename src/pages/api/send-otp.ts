@@ -1,27 +1,33 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { otpStore } from "../../lib/otpStore"; // adjust path as needed
+import dbConnect from "@/lib/dbConnect";
+import User from "@/models/User";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await dbConnect();
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
   const { email } = req.body;
-
   if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ message: "Invalid email" });
   }
 
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // generate OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Store OTP in shared store
-  otpStore[email] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // 5 mins
+  user.otp = otp;
+  user.otpExpiry = new Date(Date.now() + 5 * 60 * 1000); // valid 5 min
+  await user.save();
 
-  console.log('Stored OTP:', otpStore[email]);
-
-  // simulate sending email
   console.log(`Sending OTP ${otp} to email: ${email}`);
+  // TODO: replace console.log with nodemailer send
 
-  // return response (or omit otp for production)
-  return res.status(200).json({ message: "OTP sent successfully", otp });
+  return res.status(200).json({ message: "OTP sent successfully" });
 }

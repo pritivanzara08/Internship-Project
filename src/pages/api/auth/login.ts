@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const SECRET = process.env.JWT_SECRET || 'dev-secret';
 const COOKIE_NAME = process.env.JWT_COOKIE_NAME || 'token';
 const TOKEN_EXPIRY = '1d';
+const isProd = process.env.NODE_ENV === 'production';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await dbConnect();
@@ -27,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     //check password
-    const ok = await bcrypt.compare(password, user.passwordHash);
+    const ok = await bcrypt.compare(password, user.password);
     if (!ok) {
         return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -44,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     //set cookie
-    res.setHeader('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; Max-Age=${7 * 24 * 60 * 60}; SameSite=Strict; Secure`);
+    res.setHeader('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; Max-Age=${7 * 24 * 60 * 60}; SameSite=Strict;  ${isProd ? "Secure" : ""}`);
 
     res.status(200).json({ user: { id: user._id, email: user.email, role: user.role, name: user.name } });
 

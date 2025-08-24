@@ -30,7 +30,7 @@ html {
   gap: 15px;
 }
 
-.facebook-link, .whatsapp-link, .instagram-link {
+.facebook-link, .whatsapp-link, .instagram-link, .youtube-link {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
@@ -39,8 +39,16 @@ html {
   transition: transform 0.2s;
 }
 
-.facebook-link:hover, .whatsapp-link:hover, .instagram-link:hover {
+.facebook-link:hover, .whatsapp-link:hover, .instagram-link:hover, .youtube-link:hover {
   transform: scale(1.5);
+}
+
+.social-icon-youtube {
+  color: #FF0000;
+}
+
+.social-icon-youtube:hover {
+  color: #171212;
 }
 
 .icon-text {

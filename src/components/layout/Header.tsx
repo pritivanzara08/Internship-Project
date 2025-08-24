@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaEnvelope,
   FaMapMarkedAlt,
@@ -10,7 +10,9 @@ import {
   FaTruck,
 } from "react-icons/fa";
 import "@/components/layout/Header.css";
-import { FaFacebook, FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from "react-icons/fa";
+import { stat } from "fs";
+import { error } from "console";
 
 const Header: React.FC = () => {
   const [search, setSearch] = useState("");
@@ -31,6 +33,42 @@ const Header: React.FC = () => {
     setSelectedCategory(e.target.value);
   };
 
+  //fetch user location
+  const [location, setLocation] = useState("Fetching location...");
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+            );
+            const data = await response.json();
+            if (data.address) {
+              const city = data.address.city || data.address.town || data.address.village || "";
+              const state = data.address.state || "";
+              setLocation(city && state ? `${city}, ${state}`: city || state);
+            } else {
+              setLocation("Location not found");
+            }
+          } catch (error) {
+            setLocation("Error fetching location");
+          }
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            setLocation("Location permission denied");
+          } else {
+            setLocation("Unable to fetch location");
+          }
+        }
+      );
+    } else {
+      setLocation("Geolocation not supported");
+    }
+  }, []);
+
   const handleLogout = () => {
     // Logic to handle user logout
     setUserLoggedIn(false);
@@ -43,6 +81,14 @@ const Header: React.FC = () => {
     <header className="header">
       <div className="header-top">
         <div className="header-top-left">
+          <a
+            className="youtube-link"
+            href="https://www.youtube.com/@giftarticle2324"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaYoutube className="social-icon-youtube" />
+          </a>
           <a
             className="facebook-link"
             href="https://www.facebook.com"
@@ -77,14 +123,14 @@ const Header: React.FC = () => {
         </div>
         <div className="header-top-right">
           <div className="icon-text">
-            <FaMapMarkedAlt className="icon" /> Ahmedabad, India
+            <FaMapMarkedAlt className="icon" /> {location}
           </div>
-          <Link href="/track-order" className="icon-text">
-            <FaTruck className="icon" /> Track Order
-          </Link>
           {userLoggedIn ? (
             <div className="user-info">
               <span>Hello, {userName}</span>
+          <Link href="/track-order" className="icon-text">
+            <FaTruck className="icon" /> Track Order
+          </Link>
               <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (

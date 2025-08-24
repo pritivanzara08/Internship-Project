@@ -1,6 +1,6 @@
 import React from 'react';
 import "../../styles/theme.css";
-import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const UsefulLinks = () => {
   return (
@@ -46,6 +46,9 @@ const UsefulLinks = () => {
             </a>
             <a className="instagram-link" href="https://www.instagram.com/_gift_article/" target="_blank" rel="noopener noreferrer">
               <FaInstagram className="social-icon-instagram" />
+            </a>
+            <a className="youtube-link" href="https://www.youtube.com/@giftarticle2324" target="_blank" rel="noopener noreferrer">
+              <FaYoutube className="social-icon-youtube" />
             </a>
           </ul>
         </div>
