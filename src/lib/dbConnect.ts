@@ -1,47 +1,39 @@
-import mongoose from 'mongoose';
+import mongoose, { Connection } from "mongoose";
 
-type MongooseWithCache = typeof mongoose & {
-  conn: typeof mongoose.connection | null;
-  promise: Promise<typeof mongoose.connection> | null;
-};
-
-declare global {
-  var _mongoose: MongooseWithCache | undefined;
-}
-
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
 }
 
-let cached = (global as any)._mongoose as MongooseWithCache | undefined;
+// Cached connection across hot reloads in development
+let cached = (global as any).mongoose;
 
 if (!cached) {
-  cached = (global as any)._mongoose = { 
-    conn: null, 
-    promise: null,
-  } as MongooseWithCache;
+  cached = (global as any).mongoose = { conn: null, promise: null };
 }
 
-async function dbConnect(): Promise<typeof mongoose.connection> {
-  if (cached!.conn) {
-    return cached!.conn;
+async function dbConnect(): Promise<Connection> {
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  if (!cached!.promise) {
-    // Initialize a connection promise to prevent parallel connections
-    cached!.promise = mongoose
-      .connect(MONGODB_URI!, {
-      } as any)
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(MONGODB_URI, {
+        bufferCommands: false,
+      })
       .then((mongooseInstance) => {
-        cached!.conn = mongooseInstance.connection;
-        return cached!.conn;
+        return mongooseInstance.connection;
+      })
+      .catch((err) => {
+        console.error("❌ MongoDB connection error:", err.message);
+        throw err;
       });
   }
 
-  cached!.conn = await cached!.promise;
-  return cached!.conn;
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
 export default dbConnect;

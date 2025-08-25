@@ -1,6 +1,6 @@
-import bcrypt from 'bcryptjs';
-import mongoose, { Schema, model, models, Document } from 'mongoose';
-import { IUser } from '@/types/User';
+import bcrypt from "bcryptjs";
+import mongoose, { Schema, model, models, Document } from "mongoose";
+import { IUser } from "@/types/User";
 
 export interface IUserDocument extends IUser, Document {
   comparePassword(candidate: string): Promise<boolean>;
@@ -9,11 +9,11 @@ export interface IUserDocument extends IUser, Document {
 const UserSchema = new Schema<IUserDocument>(
   {
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    name: { type: String, required: false },
-    role: { type: String, enum: ['admin', 'customer'], default: 'customer' },
-    otp: { type: String, required: false },
-    otpExpiry: { type: Date, required: false },
+    password: { type: String }, // optional until OTP verified
+    name: { type: String },
+    role: { type: String, enum: ["admin", "customer"], default: "customer" },
+    otp: { type: String },
+    otpExpiry: { type: Date },
     isVerified: { type: Boolean, default: false },
   },
   {
@@ -31,6 +31,6 @@ UserSchema.methods.comparePassword = async function (
 
 const User =
   (models.User as mongoose.Model<IUserDocument>) ||
-  model<IUserDocument>('User', UserSchema);
+  model<IUserDocument>("User", UserSchema);
 
 export default User;

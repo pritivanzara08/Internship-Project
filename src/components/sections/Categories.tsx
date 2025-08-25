@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Product } from "../../types";
 import ProductCard from "@/components/shop/ProductCard";
 import productsData from "@/data/products";
+import { useEffect, useState } from "react";
 import '../../styles/ProductStyles.css';
+import { Product } from "../../types/admin";
 
 /* Removed local Product type to avoid conflict with imported Product type */
 

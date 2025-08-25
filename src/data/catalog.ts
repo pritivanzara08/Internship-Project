@@ -1,6 +1,6 @@
 // src/data/catalog.ts
+import type { Product } from '../types/admin';
 import products from './products';
-import type { Product } from '../types';
 
 export type ProductCategory = {
   id: string;

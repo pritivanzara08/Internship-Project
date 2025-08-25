@@ -1,7 +1,7 @@
-import React from 'react';
 import Link from 'next/link';
-import { Product } from '../../types';
+import React from 'react';
 import '../../styles/ProductStyles.css';
+import { Product } from '../../types/admin';
 
 interface ProductCardProps extends Product {
     onAddToCart: (product: Product) => void;
