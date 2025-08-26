@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
 import { useRouter } from "next/router";
-import '../../styles/cart.css';
+import '@/styles/cart.css';
 
 type CartItemType = {
   id: string;

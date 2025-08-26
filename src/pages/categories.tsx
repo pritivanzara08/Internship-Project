@@ -1,6 +1,18 @@
 import React from "react";
-import Categories from "@/components/sections/Categories";
+import CategorySection from "@/components/sections/CategorySection";
 
-export default function CategoriesPage() {
-    return <Categories searchQuery={""} category={""} />;
-}
+const Categories = () => {
+  return (
+    <div className="categories-container">
+      <CategorySection categoryId="photoframes" title="Photo Frames" />
+      <CategorySection categoryId="hampers" title="Gift Hampers" />
+      <CategorySection categoryId="birthdayitems" title="Birthday Gifts" />
+      <CategorySection categoryId="anniversaryitems" title="Anniversary Gifts" />
+      <CategorySection categoryId="festiveitems" title="Festive Items" />
+      <CategorySection categoryId="leditems" title="LED Items" />
+      <CategorySection categoryId="art" title="Resin Arts" />
+    </div>
+  );
+};
+
+export default Categories;

@@ -8,10 +8,12 @@
   text-shadow: 1px 2px 8px #e1bee7;
   font-style: italic;
   src: url('/fonts/dancing-script.woff2') format('woff2');
+  border-bottom: 2px solid #fbe9d5;
+  padding-bottom: 0.3em;
 }
 
 .section-container {
-  max-width: 1100px;
+  /* max-width: 1100px; */
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -271,17 +273,11 @@
 
 /* Testimonials Section */
 .testimonials-section {
-  background: #f9f9f9;
+  background: #fff;
   border-radius: 12px;
   margin: 2rem 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: none;
   padding: 2.5rem 0;
-}
-
-.section-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 16px;
 }
 
 .swiper-container {
@@ -448,18 +444,6 @@
 }
 
 /* Contact Us Section */
-.beautiful-title {
-  font-family: "Dancing Script";
-  font-size: 2.8rem;
-  color: #000000;
-  text-align: center;
-  margin-bottom: 0.5em;
-  letter-spacing: 1px;
-  text-shadow: 1px 2px 8px #e1bee7;
-  font-style: italic ;
-  src: url('/fonts/dancing-script.woff2') format('woff2');
-}
-
 .contactUsSection {
   padding: 40px 0;
   background-color: #f0f0f0;
@@ -473,9 +457,6 @@
   margin-top: 30px;
 }
 .contactUsItem {
-  background: transparent; /* Remove box background */
-  border-radius: 0; /* Remove border radius */
-  box-shadow: none; /* Remove box shadow */
   padding: 25px 30px;
   min-width: 220px;
   max-width: 260px;
