@@ -3,6 +3,7 @@ import ProductCard from "@/components/shop/ProductCard";
 import productsData from "@/data/products";
 import { Product } from "@/types/admin";
 import "@/styles/ProductStyles.css";
+import Link from "next/link";
 
 type CategorySectionProps = {
   categoryId: string;
@@ -62,8 +63,13 @@ const CategorySection: React.FC<CategorySectionProps> = ({ categoryId, title, se
 
   return (
     <section className="categories-section">
-      <div className="section-container">
-        <h2 className="beautiful-title">{title}</h2>
+      <div className="categories-container">
+        <div className="category-header">
+          <h2 className="beautiful-title">{title}</h2>
+          <Link href={`/category/${categoryId}`} className="view-all-link">
+            View All
+          </Link>
+        </div>
 
         <div className="scroll-container-wrapper">
           <button className="scroll-btn left" onClick={scrollLeft}>{"<"}</button>

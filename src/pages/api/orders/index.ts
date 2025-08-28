@@ -1,14 +1,23 @@
-// // import { db } from "@/lib/firebase";
-// import { collection, addDoc } from "firebase/firestore";
-// import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/dbConnect";
+import Order from "@/models/Order";
 
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   if (req.method === "POST") {
-//     const order = req.body;
-//     const docRef = await addDoc(collection(db, "orders"), order);
-//     return res.status(201).json({ id: docRef.id });
-//   }
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await dbConnect();
+  if (req.method === "GET") {
+    const orders = await Order.find({});
+    return res.status(200).json(orders);
+  }
 
-//   res.setHeader("Allow", ["POST"]);
-//   res.status(405).end(`Method ${req.method} Not Allowed`);
-// }
+  if (req.method === "POST") {
+    try {
+      const order = await Order.create(req.body);
+      return res.status(201).json(order);
+    } catch (error) {
+      console.error("Error creating order:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  return res.status(405).json({ message: "Method not allowed" });
+}

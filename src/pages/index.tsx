@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import CategorySection from "@/components/sections/CategorySection";
 import ProductList from "@/components/product/ProductList";
 import AboutUs from "@/components/sections/AboutUs";
 import ContactUs from "@/components/sections/ContactUs";
@@ -9,7 +10,6 @@ import Testimonials from "@/components/sections/Testimonials";
 import UsefulLinks from "@/components/sections/UsefulLinks";
 import '@/styles/globals.css';
 import InquiryFormPage from "./inquiry-form";
-import CategorySection from "@/components/sections/CategorySection";
 
 
 export default function Home() {
@@ -20,8 +20,21 @@ export default function Home() {
     <>
       {/* Add state handling for search/filter if needed */}
       <Hero />
-      <div id="categories"><CategorySection categoryId={selectedCategory} title={""} /></div>
-      <div id="products"><ProductList/></div>
+      <div id="categories">
+        <CategorySection categoryId={selectedCategory} title={"Shop by Category"} />
+      </div>
+      <div id="products">
+        <ProductList
+          category={selectedCategory || undefined}
+          searchQuery={searchQuery || undefined}
+          limit={!searchQuery && !selectedCategory ? 6 : undefined}
+          title={searchQuery 
+            ? `Results for "${searchQuery}"`
+            : selectedCategory
+            ? `Products by ${selectedCategory}`
+            : "Featured Products"}
+        />
+      </div>
       <div id="about-us"><AboutUs /></div>
       <div id="gallery"><Gallery /></div>
       <div id="testimonials"><Testimonials /></div>

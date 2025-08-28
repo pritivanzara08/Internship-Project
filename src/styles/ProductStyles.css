@@ -258,10 +258,10 @@ background: #135aaf;
   padding: 3rem 0;
 }
 
-.section-container {
+.categories-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 1rem;
 }
 
 /* Categories Grid */
@@ -272,6 +272,89 @@ background: #135aaf;
   justify-content: center;
   margin-top: 1.5rem;
 }
+
+.category-card-container {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1rem;
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+
+.category-card-container:hover {
+  transform: scale(1.05);
+}
+
+.category-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-info {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-info {
+  transform: scale(1.05);
+}
+
+/* category image */
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+/* category label under image */
+.category-label {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* horizontal product divider row */
+.product-divider {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: thin;
+}
+
+.product-divider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.product-divider::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+/* preview thumbnails */
+.divider-product-image {
+  flex: 0 0 auto;
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.divider-product-image:hover {
+  transform: scale(1.08);
+}
+
 
 /* Product Card */
 .product-card {

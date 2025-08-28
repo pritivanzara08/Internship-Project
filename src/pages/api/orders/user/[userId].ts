@@ -1,27 +1,15 @@
-// import { db } from "@/lib/firebase";
-// import { collection, getDocs, query, where } from "firebase/firestore";
-// import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "@/lib/dbConnect";
+import Order from "@/models/Order";
 
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   const { userId } = req.query;
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await dbConnect();
+  const { uid } = req.query;
 
-//   if (req.method === "GET") {
-//     try {
-//       const ordersRef = collection(db, "orders");
-//       const q = query(ordersRef, where("userId", "==", userId));
-//       const querySnapshot = await getDocs(q);
+  if (req.method === "GET") {
+    const orders = await Order.find({ userId: uid });
+    return res.status(200).json(orders);
+  }
 
-//       const orders = querySnapshot.docs.map(doc => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
-
-//       return res.status(200).json(orders);
-//     } catch (error) {
-//       return res.status(500).json({ error: "Failed to fetch user orders" });
-//     }
-//   }
-
-//   res.setHeader("Allow", ["GET"]);
-//   res.status(405).end(`Method ${req.method} Not Allowed`);
-// }
+  return res.status(405).json({ message: "Method not allowed" });
+}

@@ -11,13 +11,15 @@ export type Product = {
   updatedAt?: string;
 };
 
-export type Order = {
+export interface Order {
   id: string;
+  userId: string;
   customerName: string;
   total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  items: { productId: string; name: string; qty: number; price: number }[];
   createdAt: string;
-};
+}
 
 export type Customer = {
   id: string;

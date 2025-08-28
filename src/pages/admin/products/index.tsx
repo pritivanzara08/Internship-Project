@@ -1,61 +1,47 @@
 // /pages/admin/products/index.tsx
-import React from "react";
+import React, { useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Product } from "@/types/admin";
 import productsData from "@/data/products";
-import categories from "@/data/catalog";
+
 import "@/styles/adminLayout.css"; // import CSS
+import { ProductForm } from "@/components/admin/products/ProductForm";
+import { ProductTable } from "@/components/admin/products/ProductTable";
 
 const ProductsPage: React.FC = () => {
-  const [products, setProducts] = React.useState<Product[]>(productsData);
+  const [products, setProducts] = useState<Product[]>(productsData);
+  const [editing, setEditing] = useState<Product | null>(null);
+
+  const handleSave = (product: Product) => {
+    setProducts((prev) => {
+      const exists = prev.find((p) => p.id === product.id);
+      if (exists) {
+        return prev.map((p) => (p.id === product.id ? product : p));
+      }
+      return [...prev, product];
+    });
+    setEditing(null);
+  };
+
+  const handleDelete = (id: string) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
 
   return (
     <AdminLayout title="Products">
       <div className="admin-header">
-        <h2>Products</h2>
-        <button
-          className="btn-add"
-          onClick={() => alert("TODO: Add Product Form")}
-        >
+        <h2 className="beautiful-title">Products</h2>
+        <button className="btn-add" onClick={() => setEditing({} as Product)}>
           Add Product
         </button>
       </div>
-
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((p) => {
-            const category = categories.find((c) => c.id === p.categoryId);
-            return (
-              <tr key={p.id}>
-                <td>{p.name}</td>
-                <td>{p.title}</td>
-                <td>{p.description}</td>
-                <td>{category?.label || p.categoryId}</td>
-                <td>
-                  {p.imageUrl ? (
-                    <img
-                      src={p.imageUrl}
-                      alt={p.name}
-                      className="product-image"
-                    />
-                  ) : (
-                    "—"
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {editing ? (
+        <ProductForm initialData={editing} onSave={handleSave} onCancel={() => setEditing(null)} />
+      ) : (
+        <ProductTable products={products} onEdit={setEditing} onDelete={handleDelete} />
+      )}
     </AdminLayout>
   );
 };

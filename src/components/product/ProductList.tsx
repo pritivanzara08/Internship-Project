@@ -1,19 +1,50 @@
 import { useState, useEffect, useRef } from "react";
 import products from "@/data/products";
-import Link from "next/link";
 import "@/styles/ProductStyles.css";
 import { Product } from "@/types/admin";
 import Swal from "sweetalert2";
 import { FaShoppingCart } from "react-icons/fa";
 
-export default function ProductList() {
+type ProductListProps = {
+  category?: string;
+  searchQuery?: string;
+  title?: string;
+  limit?: number;
+};
+
+export default function ProductList({
+  category,
+  searchQuery,
+  title = "Featured Products",
+  limit,
+}: ProductListProps) {
   const [randomProducts, setRandomProducts] = useState<typeof products>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const shuffled = [...products].sort(() => 0.5 - Math.random());
-    setRandomProducts(shuffled.slice(0, 5)); // Show 5 products
-  }, []);
+    let filtered = [...products];
+
+    //filter by category
+    if (category) {
+      filtered = filtered.filter((p) => p.categoryId === category);
+    }
+
+    //filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    //shuffle + slice if no category/search given
+    if (!category && !searchQuery) {
+      filtered = [...products].sort(() => 0.5 - Math.random());
+      if (limit) {
+        filtered = filtered.slice(0, limit);
+      }
+    }
+    setRandomProducts(filtered);
+  }, [category, searchQuery, limit]);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -46,7 +77,7 @@ export default function ProductList() {
 
   return (
     <div className="product-list">
-      <h1 className="beautiful-title">Featured Products</h1>
+      <h1 className="beautiful-title">{title}</h1>
 
       {/* Scroll Buttons */}
       <button className="scroll-btn scroll-left" onClick={() => scroll("left")}>
@@ -57,18 +88,22 @@ export default function ProductList() {
       </button>
 
       <div className="product-scroll-container" ref={scrollRef}>
-        {randomProducts.map((p) => (
-          <div className="product-card">
-            <img src={p.imageUrl} alt={p.name} />
-            <div className="product-card-title">{p.name}</div>
-            <div className="product-card-price">₹{p.price}</div>
-            <div className="product-actions">
-              <button className="add-to-cart-btn" onClick={() => addToCart(p)}>
-                <FaShoppingCart /> Add
-              </button>
+        {randomProducts.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          randomProducts.map((p) => (
+            <div className="product-card">
+              <img src={p.imageUrl} alt={p.name} />
+              <div className="product-card-title">{p.name}</div>
+              <div className="product-card-price">₹{p.price}</div>
+              <div className="product-actions">
+                <button className="add-to-cart-btn" onClick={() => addToCart(p)}>
+                  <FaShoppingCart /> Add
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,18 +1,38 @@
+import catalog from "@/data/catalog";
 import React from "react";
-import CategorySection from "@/components/sections/CategorySection";
+import Link from "next/link";
+import "@/styles/ProductStyles.css";
 
-const Categories = () => {
+export default function CategoriesPage() {
   return (
-    <div className="categories-container">
-      <CategorySection categoryId="photoframes" title="Photo Frames" />
-      <CategorySection categoryId="hampers" title="Gift Hampers" />
-      <CategorySection categoryId="birthdayitems" title="Birthday Gifts" />
-      <CategorySection categoryId="anniversaryitems" title="Anniversary Gifts" />
-      <CategorySection categoryId="festiveitems" title="Festive Items" />
-      <CategorySection categoryId="leditems" title="LED Items" />
-      <CategorySection categoryId="art" title="Resin Arts" />
-    </div>
-  );
-};
+    <section className="categories-section">
+      <div className="categories-container">
+        <h2 className="beautiful-title">Our Categories</h2>
 
-export default Categories;
+        <div className="categories-grid">
+          {catalog.map((category) => (
+            <div key={category.id} className="category-card-container">
+              <Link href={`/categories/${category.id}`} className="category-card">
+                <div className="category-info">
+                  <img className="category-image" src={category.products[0]?.imageUrl ?? "/placeholder.png"} alt={category.label} />
+                </div>
+              </Link>
+              <h3 className="category-label">{category.label}</h3>
+
+              {/* horizontal line */}
+              {
+                category.products.length > 0 && (
+                  <div className="product-divider">
+                    {category.products.slice(0, 5).map((product) => (
+                      <img key={product.id} src={product.imageUrl} alt={product.name} className="divider-product-image" />
+                    ))}
+                  </div>
+                )
+              }
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
