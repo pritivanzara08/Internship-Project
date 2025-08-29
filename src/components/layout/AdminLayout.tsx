@@ -1,16 +1,21 @@
-// src/components/layout/AdminLayout.tsx
-import React from "react";
+import React, { ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import "@/styles/adminLayout.css";
 
-export const AdminLayout: React.FC<{ title?: string; children: React.ReactNode }> = ({ title, children }) => {
+interface Props {
+  title?: string;
+  children: ReactNode;
+  userRole?: "admin" | "customer";
+}
+
+export const AdminLayout: React.FC<Props> = ({ title, children, userRole = "admin" }) => {
   return (
     <div className="admin-layout">
-      <AdminHeader title={title} />
-      <div className="admin-layout__body">
-        <AdminSidebar />
-        <main className="admin-layout__content">{children}</main>
+      <AdminSidebar userRole={userRole} />
+      <div className="admin-main">
+        <AdminHeader title={title} />
+        <main className="admin-content">{children}</main>
       </div>
     </div>
   );

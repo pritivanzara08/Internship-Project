@@ -1,12 +1,13 @@
+import { Order, OrderStatus } from "@/types/admin";
 import React from "react";
-import { Order } from "@/types/admin";
-import { OrderStatusSelect } from "./OrderStatusSelect";
 
-export const OrderRow: React.FC<{
+interface Props {
   order: Order;
-  onStatusChange: (id: string, status: string) => void;
+  onStatusChange: (id: string, status: OrderStatus) => void;
   onDelete: (id: string) => void;
-}> = ({ order, onStatusChange, onDelete }) => {
+}
+
+export const OrderRow: React.FC<Props> = ({ order, onStatusChange, onDelete }) => {
   return (
     <tr>
       <td>{order.id}</td>
@@ -15,15 +16,19 @@ export const OrderRow: React.FC<{
       <td>{order.items.length}</td>
       <td>{new Date(order.createdAt).toLocaleDateString()}</td>
       <td>
-        <OrderStatusSelect
+        <select
           value={order.status}
-          onChange={(status) => onStatusChange(order.id, status)}
-        />
+          onChange={(e) => onStatusChange(order.id, e.target.value as OrderStatus)}
+        >
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
       </td>
       <td>
-        <button className="btn-delete" onClick={() => onDelete(order.id)}>
-          Delete
-        </button>
+        <button onClick={() => onDelete(order.id)}>Delete</button>
       </td>
     </tr>
   );

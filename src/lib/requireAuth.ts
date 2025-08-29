@@ -1,35 +1,32 @@
-import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
+import type { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import jwt from "jsonwebtoken";
 
 
-const SECRET = process.env.JWT_SECRET || 'dev-secret';
-export type AuthenticatedReq = NextApiRequest & { user?: { userId: string; role: string } };
+export interface AuthenticatedReq extends NextApiRequest {
+    user?: { id: string; email: string; role: string };
+};
 
-export function requireAuth(handler: (req: AuthenticatedReq, res: NextApiResponse) => any) {
-    return async (req: NextApiRequest, res: NextApiResponse) => {
-        //Read token from cookies
-        const token = parseTokenFromCookies(req);
+export function requireAuth(handler: any) {
+    return async (req: AuthenticatedReq, res: NextApiResponse) => {
+        //Read token from headers
+        const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.status(401).json({ message: 'Not authenticated' });
+            return res.status(401).json({ message: 'Unauthorized' });
         }
 
         try {
-            const payload = jwt.verify(token, SECRET) as { userId: string; role: string };
-            (req as AuthenticatedReq).user = { userId: payload.userId, role: payload.role };
-            return handler(req as AuthenticatedReq, res);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+                id: string;
+                email: string;
+                role: string
+            };
+            req.user = decoded;
+            return handler(req, res);
         } catch (error) {
             console.error(error);
-            return res.status(401).json({ message: 'Not authenticated' });
+            return res.status(401).json({ message: 'Invalid token' });
         }
     };
 }
 
-function parseTokenFromCookies(req: NextApiRequest) {
-    //basic cookie parsing
-    const cookieHeader = req.headers.cookie || '';
-    const parts = cookieHeader.split(';').map(p => p.trim());
-    const tokenPart = parts.find(p => p.startsWith('token=') || p.startsWith('JWT_TOKEN=') || p.startsWith('cookie_token='));
-    if (!tokenPart) return null;
-    return tokenPart.split('=')[1];
-}

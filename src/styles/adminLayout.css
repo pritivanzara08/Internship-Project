@@ -28,7 +28,7 @@
   flex-direction: column;
 }
 
-.admin-layout__content {
+.admin-content {
   padding: 24px;
   width: 100%;
   max-width: 1200px;
@@ -134,6 +134,14 @@
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
+}
+
+/* Admin Dashboard */
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
 }
 
 /* --- Responsive --- */

@@ -1,10 +1,10 @@
 import React from "react";
-import { Order } from "@/types/admin";
+import { Order, OrderStatus } from "@/types/admin";
 import { OrderRow } from "./OrderRow";
 
 interface Props {
   orders: Order[];
-  onStatusChange: (id: string, status: string) => void;
+  onStatusChange: (id: string, status: OrderStatus) => void;
   onDelete: (id: string) => void;
 }
 

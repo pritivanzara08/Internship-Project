@@ -8,20 +8,26 @@ import {
   FaSearch,
   FaShoppingCart,
   FaTruck,
+  FaUser,
 } from "react-icons/fa";
-import "@/components/layout/Header.css";
 import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from "react-icons/fa";
+import "@/components/layout/Header.css";
 import { stat } from "fs";
 import { error } from "console";
 
 const Header: React.FC = () => {
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
   const router = useRouter();
+
+  const [search, setSearch] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // const [selectedCategory, setSelectedCategory] = useState("");
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userName, setUserName] = useState("Guest");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [userRole, setUserRole] = useState<"admin" | "customer" | null>(null);
+
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
@@ -29,9 +35,24 @@ const Header: React.FC = () => {
     }
   };
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-  };
+  // const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setSelectedCategory(e.target.value);
+  // };
+
+  // Fetch user data from localStorage/session
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        setUserLoggedIn(true);
+        setUserName(parsedUser.name || "User");
+        setUserRole(parsedUser.role || "customer"); // role saved during login
+      } catch (e) {
+        console.error("Error parsing user from localStorage", e);
+      }
+    }
+  }, []);
 
   //fetch user location
   const [location, setLocation] = useState("Fetching location...");
@@ -48,7 +69,7 @@ const Header: React.FC = () => {
             if (data.address) {
               const city = data.address.city || data.address.town || data.address.village || "";
               const state = data.address.state || "";
-              setLocation(city && state ? `${city}, ${state}`: city || state);
+              setLocation(city && state ? `${city}, ${state}` : city || state);
             } else {
               setLocation("Location not found");
             }
@@ -70,10 +91,10 @@ const Header: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    // Logic to handle user logout
+    localStorage.removeItem("user");
     setUserLoggedIn(false);
     setUserName("Guest");
-    // Optionally redirect to home or login page
+    setUserRole(null);
     router.push("/login");
   };
 
@@ -125,12 +146,22 @@ const Header: React.FC = () => {
           <div className="icon-text">
             <FaMapMarkedAlt className="icon" /> {location}
           </div>
+          {/* <div className="icon-text">
+            <FaUser className="icon" /> {userRole === "admin" ? "Admin" : "Customer"}
+          </div> */}
           {userLoggedIn ? (
             <div className="user-info">
               <span>Hello, {userName}</span>
-          <Link href="/track-order" className="icon-text">
-            <FaTruck className="icon" /> Track Order
-          </Link>
+              {userRole === "customer" && (
+                <Link href="/track-order" className="icon-text">
+                  <FaTruck className="icon" /> Track Order
+                </Link>
+              )}
+              {userRole === "admin" && (
+                <Link href="/admin" className="icon-text">
+                  Admin Dashboard
+                </Link>
+              )}
               <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (

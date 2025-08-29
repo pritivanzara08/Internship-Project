@@ -72,7 +72,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({ categoryId, title, se
         </div>
 
         <div className="scroll-container-wrapper">
-          <button className="scroll-btn left" onClick={scrollLeft}>{"<"}</button>
+          {/* <button className="scroll-btn left" onClick={scrollLeft}>{"<"}</button> */}
 
           <div className="scroll-container" ref={scrollRef}>
             {products.length === 0 ? (
@@ -84,7 +84,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({ categoryId, title, se
             )}
           </div>
 
-          <button className="scroll-btn right" onClick={scrollRight}>{">"}</button>
+          {/* <button className="scroll-btn right" onClick={scrollRight}>{">"}</button> */}
         </div>
       </div>
     </section>

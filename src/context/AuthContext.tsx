@@ -23,7 +23,7 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,8 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
       throw new Error('Signup failed');
     }
     const data = await res.json();
-    setUser({ uid: data.uid, email, role: data.role });
+    const u = data.user;
+    setUser({ uid: u.id, email: u.email, role: u.role });
   };
 
   // Login via Api
@@ -57,7 +58,8 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
       throw new Error('Login failed');
     }
     const data = await res.json();
-    setUser({ uid: data.uid, email: data.email, role: data.role });
+    const u = data.user;
+    setUser({ uid: u.id, email: u.email, role: u.role });
   };
 
   //Logout via Api
@@ -74,17 +76,18 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
     let mounted = true;
 
     const fetchUser = async () => {
-      try{
+      try {
         const res = await fetch('/api/auth/user', {
           method: 'GET',
           credentials: 'include',
         });
         if (res.ok) {
           const data = await res.json();
-          if (mounted && data?.uid){
-          setUser({ uid: data.uid, email: data.email, role: data.role as User['role'] });
-        } 
-      }else {
+          if (mounted && data?.user) {
+            const u = data.user;
+            setUser({ uid: u.id, email: u.email, role: u.role as User['role'] });
+          }
+        } else {
           if (mounted) setUser(null);
         }
       } catch (error) {

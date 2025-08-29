@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next/dist/shared/lib/utils";
+import type { NextApiResponse } from "next";
 import { requireAuth, AuthenticatedReq } from "@/lib/requireAuth";
 
 

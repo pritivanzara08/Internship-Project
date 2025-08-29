@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       await dbConnect();
 
-      const { firstName, lastName, email, password, address, landmark, city, state, pinCode, country, contactNo, referral } = req.body;
+      const { firstName, lastName, email, password, address, landmark, city, state, pinCode, country, contactNo, referral, role } = req.body;
 
       // Check if email exists
       const existingUser = await User.findOne({ email });
@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const newUser = await User.create({
         firstName,
         lastName,
+        name: `${firstName} ${lastName}`,
         email,
         password: passwordHash,
         address,
@@ -32,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         pinCode,
         country,
         contactNo,
-        referral
+        referral,
+        role: role || "customer",
       });
 
       return res.status(201).json({ message: "Signup successful", user: newUser });

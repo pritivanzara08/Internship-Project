@@ -1,43 +1,61 @@
-import React from "react";
-import {AdminLayout} from "@/components/layout/AdminLayout";
-import type { NextPage } from "next";
+import React, { useEffect, useState } from "react";
+import { AdminLayout } from "@/components/layout/AdminLayout";
+import { useRouter } from "next/router";
+import { useAuth } from "@/context/AuthContext";
 import "@/styles/adminLayout.css";
-import { DashboardWidgetPanel } from '@/components/admin/DashboardWidgets';
-import Link from "next/dist/client/link";
 
-const DashboardPage: NextPage = () => {
-  // You can replace this static data with real API data later
-  const widgets = [
-    { title: "Sales", value: "$12,340" },
-    { title: "Orders", value: "320" },
-    { title: "Users", value: "1,240" },
-  ];
+interface DashboardData {
+  usersCount: number;
+  newOrdersToday: number;
+  revenueThisMonth: number;
+}
+
+export default function AdminDashboardPage() {
+  const { user, loading: authLoading } = useAuth();
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/admin/dashboard");
+        if (res.status === 403) {
+          router.push("/login");
+          return;
+        }
+        const json = await res.json();
+        setData(json.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) fetchData();
+  }, [router, user]);
+
+  if (authLoading || loading) return <p>Loading...</p>;
+  if (!user || !data) return <p>No data available</p>;
 
   return (
-     <AdminLayout title="Dashboard">
-      <DashboardWidgetPanel
-        widgets={[
-          { title: 'Revenue', value: '$12,400', delta: '+8%' },
-          { title: 'Orders', value: '320', delta: '+12%' },
-          { title: 'Customers', value: '1,240', delta: '+5%' },
-          { title: 'Top Product', value: 'Nebula Lamp', delta: '' },
-        ]}
-      />
-      <section className="dashboard-lower-section">
-        <div className="dashboard-card">
-          <h3>Recent Orders</h3>
-          <p>Placeholder for recent orders list</p>
-          <Link href="/admin/orders" passHref>
-            <a>View all orders</a>
-          </Link>
+    <AdminLayout title="Admin Dashboard" userRole={user.role === "admin" ? "admin" : undefined}>
+      <h1 className="beautiful-title">Dashboard</h1>
+      <div className="admin-dashboard-grid">
+        <div className="card">
+          <h2>Users</h2>
+          <p>{data.usersCount}</p>
         </div>
-        <div className="dashboard-card">
-          <h3>Inventory Highlights</h3>
-          <p>Placeholder for inventory stats</p>
+        <div className="card">
+          <h2>New Orders Today</h2>
+          <p>{data.newOrdersToday}</p>
         </div>
-      </section>
+        <div className="card">
+          <h2>Revenue This Month</h2>
+          <p>${data.revenueThisMonth}</p>
+        </div>
+      </div>
     </AdminLayout>
   );
-};
-
-export default DashboardPage;
+}

@@ -1,4 +1,7 @@
-// /types/admin.ts
+export type UserRole = "admin" | "customer";
+
+export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+
 export type Product = {
   id: string;
   name: string;
@@ -16,8 +19,8 @@ export interface Order {
   userId: string;
   customerName: string;
   total: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-  items: { productId: string; name: string; qty: number; price: number }[];
+  items: OrderItem[];
+  status: OrderStatus;
   createdAt: string;
 }
 
@@ -29,3 +32,10 @@ export type Customer = {
   joinedAt: string;
   totalSpend?: number;
 };
+
+export interface OrderItem {
+  productId: string;
+  name: string;
+  qty: number;
+  price: number;
+}

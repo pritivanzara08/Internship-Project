@@ -1,41 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-const SECRET = process.env.JWT_SECRET || 'dev-secret';
-const COOKIE_NAME = (process.env.JWT_COOKIE_NAME || 'token') as string;
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-export function parseTokenFromCookies(req: NextRequest) {
-const cookie = req.headers.get('cookie') || '';
-const tokenMatch = cookie.split(`${COOKIE_NAME}=`)[1];
-if (!tokenMatch) return null;
-try {
-const decoded = jwt.verify(tokenMatch, SECRET);
-return decoded as { userId: string; role: string };
-} catch {
-return null;
-}
+const SECRET = process.env.JWT_SECRET || "dev-secret";
+const COOKIE_NAME = process.env.JWT_COOKIE_NAME || "token";
+
+// helper: decode token from cookies
+export function parseToken(req: NextRequest) {
+  const token = req.cookies.get(COOKIE_NAME)?.value;
+  if (!token) return null;
+
+  try {
+    return jwt.verify(token, SECRET) as { userId: string; role: string };
+  } catch {
+    return null;
+  }
 }
 
+// helper: check if request is from admin
 export function isAdmin(req: NextRequest): boolean {
-const payload = parseTokenFromCookies(req);
-return !!payload && payload.role === 'admin';
+  const payload = parseToken(req);
+  return !!payload && payload.role === "admin";
 }
 
+// middleware to guard /admin routes
 export function middleware(req: NextRequest) {
-// Protect /admin routes
-const { pathname } = req.nextUrl;
-if (pathname.startsWith('/admin')) {
-const payload = parseTokenFromCookies(req);
-if (!payload || payload.role !== 'admin') {
-// Redirect to login or show 403
-const url = req.nextUrl.clone();
-url.pathname = '/login';
-return NextResponse.redirect(url);
-}
-}
-// Allow other routes
-return NextResponse.next();
+  const { pathname } = req.nextUrl;
+
+  if (pathname.startsWith("/admin")) {
+    if (!isAdmin(req)) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-matcher: ['/admin/:path*'], // adjust if you want to guard more routes
+  matcher: ["/admin/:path*"], // applies only to admin routes
 };

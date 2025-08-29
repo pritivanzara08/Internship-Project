@@ -11,6 +11,17 @@ const UserSchema = new Schema<IUserDocument>(
     email: { type: String, required: true, unique: true },
     password: { type: String }, // optional until OTP verified
     name: { type: String },
+    firstName: { type: String },
+    lastName: { type: String },
+    address: { type: String },
+    landmark: { type: String },
+    city: { type: String },
+    state: { type: String },
+    pinCode: { type: String },
+    country: { type: String },
+    contactNo: { type: String },
+    referral: { type: String },
+
     role: { type: String, enum: ["admin", "customer"], default: "customer" },
     otp: { type: String },
     otpExpiry: { type: Date },
