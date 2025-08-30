@@ -1,94 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-import ProductCard from "@/components/shop/ProductCard";
-import productsData from "@/data/products";
-import { Product } from "@/types/admin";
-import "@/styles/ProductStyles.css";
+// src/components/shop/CategorySection.tsx
 import Link from "next/link";
+import { ProductCategory } from "@/data/catalog";
+import "@/styles/theme.css"
 
-type CategorySectionProps = {
-  categoryId: string;
-  title: string;
-  searchQuery?: string;
-};
+interface CategorySectionProps {
+  category: ProductCategory;
+}
 
-const CategorySection: React.FC<CategorySectionProps> = ({ categoryId, title, searchQuery }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setTimeout(() => {
-      let filtered = productsData.filter((p) => p.categoryId === categoryId);
-
-      // Shuffle products randomly
-      filtered = filtered.sort(() => Math.random() - 0.5);
-
-      // Limit to 6 or 7
-      filtered = filtered.slice(0, 7);
-
-      setProducts(filtered);
-      setLoading(false);
-    }, 300);
-  }, [categoryId]);
-
-  const addToCart = (product: Product) => {
-    const existing = localStorage.getItem("cart");
-    const cart = existing ? JSON.parse(existing) : [];
-    const existingItemIndex = cart.findIndex((item: Product) => item.id === product.id);
-
-    if (existingItemIndex !== -1) {
-      cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert(`${product.name} added to cart!`);
-    window.location.href = "/cart";
-  };
-
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
-
-  if (loading) return <div>Loading {title}...</div>;
-
+export default function CategorySection({ category }: CategorySectionProps) {
   return (
-    <section className="categories-section">
-      <div className="categories-container">
-        <div className="category-header">
-          <h2 className="beautiful-title">{title}</h2>
-          <Link href={`/category/${categoryId}`} className="view-all-link">
-            View All
-          </Link>
-        </div>
-
-        <div className="scroll-container-wrapper">
-          {/* <button className="scroll-btn left" onClick={scrollLeft}>{"<"}</button> */}
-
-          <div className="scroll-container" ref={scrollRef}>
-            {products.length === 0 ? (
-              <div>No products found.</div>
-            ) : (
-              products.map((product) => (
-                <ProductCard key={product.id} {...product} onAddToCart={addToCart} />
-              ))
-            )}
-          </div>
-
-          {/* <button className="scroll-btn right" onClick={scrollRight}>{">"}</button> */}
-        </div>
+    <section className="category-section">
+      <div className="category-header">
+        <h2>{category.label}</h2>
+        <Link href={`/category/${category.id}`} className="view-all-btn">
+          View All →
+        </Link>
       </div>
     </section>
   );
-};
-
-export default CategorySection;
+}

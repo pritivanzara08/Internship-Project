@@ -1,25 +1,22 @@
-// src/data/catalog.ts
-import type { Product } from '../types/admin';
-import products from './products';
-
 export type ProductCategory = {
   id: string;
   label: string;
-  products: Product[];
+  coverImage: string;
 };
 
 const categories: ProductCategory[] = [
-  { id: 'photoframes', label: 'Photo Frames', products: [] },
-  { id: 'hampers', label: 'Gift Hampers', products: [] },
-  { id: 'birthdayitems', label: 'Birthday Items', products: [] },
-  { id: 'anniversaryitems', label: 'Anniversary Items', products: [] },
-  { id: 'festiveitems', label: 'Festive Items', products: [] },
-  { id: 'leditems', label: 'LED Items', products: [] },
+  { id: 'photoframes', label: 'Photo Frames', coverImage: '/images/categories/photoframe.jpeg' },
+  { id: 'hampers', label: 'Gift Hampers', coverImage: '/images/categories/hampers.jpeg' },
+  { id: 'birthdayitems', label: 'Birthday Items', coverImage: '/images/categories/birthdayitems.jpeg' },
+  { id: 'anniversaryitems', label: 'Anniversary Items', coverImage: '/images/categories/anniversaryitems.jpeg' },
+  { id: 'festiveitems', label: 'Festive Items', coverImage: '/images/categories/festiveitems.jpeg' },
+  { id: 'leditems', label: 'LED Items', coverImage: '/images/categories/leditems.jpeg' },
+  { id: 'photoframes', label: 'Photo Frames', coverImage: '/images/categories/photoframe.jpeg' },
+  { id: 'hampers', label: 'Gift Hampers', coverImage: '/images/categories/hampers.jpeg' },
+  { id: 'birthdayitems', label: 'Birthday Items', coverImage: '/images/categories/birthdayitems.jpeg' },
+  { id: 'anniversaryitems', label: 'Anniversary Items', coverImage: '/images/categories/anniversaryitems.jpeg' },
+  { id: 'festiveitems', label: 'Festive Items', coverImage: '/images/categories/festiveitems.jpeg' },
+  { id: 'leditems', label: 'LED Items', coverImage: '/images/categories/leditems.jpeg' },
 ];
-
-// populate
-categories.forEach((cat) => {
-  cat.products = (products.filter(p => p.categoryId === cat.id));
-});
 
 export default categories;

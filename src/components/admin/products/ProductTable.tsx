@@ -2,6 +2,7 @@ import React from "react";
 import { Product } from "@/types/admin";
 import categories from "@/data/catalog";
 import { ProductRow } from "./ProductRow";
+import "@/styles/ProductStyles.css";
 
 interface Props {
   products: Product[];

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Product } from "@/types/admin";
 import categories from "@/data/catalog";
+import "@/styles/ProductStyles.css";
 
 interface Props {
   initialData?: Product;

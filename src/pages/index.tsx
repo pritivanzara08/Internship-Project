@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import CategorySection from "@/components/sections/CategorySection";
+import CategoryCard from "@/components/shop/CategoryCard";
 import ProductList from "@/components/product/ProductList";
 import AboutUs from "@/components/sections/AboutUs";
 import ContactUs from "@/components/sections/ContactUs";
@@ -8,33 +8,41 @@ import Gallery from "@/components/sections/Gallery";
 import Hero from "@/components/sections/Hero";
 import Testimonials from "@/components/sections/Testimonials";
 import UsefulLinks from "@/components/sections/UsefulLinks";
-import '@/styles/globals.css';
 import InquiryFormPage from "./inquiry-form";
+import categories from "@/data/catalog";
+import '@/styles/theme.css';
 
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-
+  const [searchQuery] = useState('');
+  const [selectedCategory] = useState('');
   return (
     <>
-      {/* Add state handling for search/filter if needed */}
+
       <Hero />
+
       <div id="categories">
-        <CategorySection categoryId={selectedCategory} title={"Shop by Category"} />
+        <h1 className="beautiful-title">Shop by Category</h1>
+        <div className="category-grid">
+          {categories.map((cat, index) => (
+            <CategoryCard key={cat.id} category={cat} index={index} />
+          ))}
+        </div>
       </div>
+
       <div id="products">
         <ProductList
           category={selectedCategory || undefined}
           searchQuery={searchQuery || undefined}
           limit={!searchQuery && !selectedCategory ? 6 : undefined}
-          title={searchQuery 
+          title={searchQuery
             ? `Results for "${searchQuery}"`
             : selectedCategory
-            ? `Products by ${selectedCategory}`
-            : "Featured Products"}
+              ? `Products by ${selectedCategory}`
+              : "Featured Products"}
         />
       </div>
+
       <div id="about-us"><AboutUs /></div>
       <div id="gallery"><Gallery /></div>
       <div id="testimonials"><Testimonials /></div>

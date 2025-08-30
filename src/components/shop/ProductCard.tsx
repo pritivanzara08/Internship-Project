@@ -1,41 +1,21 @@
-import Link from 'next/link';
-import React from 'react';
-import '@/styles/ProductStyles.css';
+// src/components/shop/ProductCard.tsx
 import { Product } from "@/types/admin";
+import "@/styles/ProductStyles.css";
 
 interface ProductCardProps {
-    product: Product;
-    onAddToCart: (product: Product) => void;
+  product: Product;
+  onAddToCart: (p: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-    product,
-    onAddToCart,
-}) => {
-    const { id, name, imageUrl, description, price } = product;
-    return (
-        <div className="product-card">
-            <img src={imageUrl} alt={name} className="product-image" />
-
-            <div className="product-card-title">{name}</div>
-            <div className="product-card-desc">{description}</div>
-            <div className="product-card-price">₹{price}</div>
-
-            <div className="product-actions">
-                <Link href={`/product/${id}`}>
-                    <button className="view-btn">View</button>
-                </Link>
-                {onAddToCart && (
-                    <button
-                        className="add-btn"
-                        onClick={() => onAddToCart(product)}
-                    >
-                        Add to Cart
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  return (
+    <div className="product-card">
+      <img src={product.imageUrl} alt={product.name} />
+      <h3>{product.name}</h3>
+      <p>{product.description}</p>
+      <button onClick={() => onAddToCart(product)}>Add to Cart</button>
+    </div>
+  );
 };
 
 export default ProductCard;
