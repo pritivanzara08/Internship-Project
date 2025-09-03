@@ -11,6 +11,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from "react-icons/fa";
+import SearchBar from "../common/SearchBar";
 import "@/components/layout/Header.css";
 import { stat } from "fs";
 import { error } from "console";
@@ -217,7 +218,7 @@ const Header: React.FC = () => {
         </nav>
         {/* Search Bar */}
         <div className="header-right">
-          <form onSubmit={handleSearch} className="header-search-form">
+          {/* <form onSubmit={handleSearch} className="header-search-form">
             <input
               type="text"
               value={search}
@@ -232,7 +233,8 @@ const Header: React.FC = () => {
             >
               <FaSearch />
             </button>
-          </form>
+          </form> */}
+          <SearchBar placeholder="Search For Gifts....." />
           {/* Login & Cart */}
           <Link href="/cart" className="icon-link">
             <FaShoppingCart className="icon" />
