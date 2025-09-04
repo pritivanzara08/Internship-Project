@@ -4,7 +4,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 interface User {
   uid: string;
   email: string | null;
-  role: 'admin' | 'user'; // Extend roles as needed
+  role: 'admin' | 'customer'; // Extend roles as needed
+  name?: string;
 }
 
 interface AuthContextProps {
@@ -41,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     const data = await res.json();
     const u = data.user;
-    setUser({ uid: u.id, email: u.email, role: u.role });
+    setUser({ uid: u.id, email: u.email, role: (u.role as string).toLowerCase() as 'admin' | 'customer', name: u.name || '' });
   };
 
   // Login via Api
@@ -59,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     const data = await res.json();
     const u = data.user;
-    setUser({ uid: u.id, email: u.email, role: u.role });
+    setUser({ uid: u.id, name: u.name || '', email: u.email , role: (u.role as string).toLowerCase() as 'admin' | 'customer' });
   };
 
   //Logout via Api
@@ -85,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const data = await res.json();
           if (mounted && data?.user) {
             const u = data.user;
-            setUser({ uid: u.id, email: u.email, role: u.role as User['role'] });
+            setUser({ uid: u.id, name: u.name || '', email: u.email , role: (u.role as string).toLowerCase() as 'admin' | 'customer' });
           }
         } else {
           if (mounted) setUser(null);

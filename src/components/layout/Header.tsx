@@ -1,31 +1,28 @@
+import "@/components/layout/Header.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
   FaEnvelope,
+  FaFacebook,
+  FaInstagram,
   FaMapMarkedAlt,
   FaPhone,
-  FaSearch,
   FaShoppingCart,
   FaTruck,
   FaUser,
+  FaWhatsapp,
+  FaYoutube
 } from "react-icons/fa";
-import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from "react-icons/fa";
 import SearchBar from "../common/SearchBar";
-import "@/components/layout/Header.css";
-import { stat } from "fs";
-import { error } from "console";
+import { useAuth } from "@/context/AuthContext";
 
 const Header: React.FC = () => {
   const router = useRouter();
+  const { user, logout } = useAuth();
 
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // const [selectedCategory, setSelectedCategory] = useState("");
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("Guest");
-  const [userRole, setUserRole] = useState<"admin" | "customer" | null>(null);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -35,25 +32,6 @@ const Header: React.FC = () => {
       router.push(`/search?query=${encodeURIComponent(search)}`);
     }
   };
-
-  // const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setSelectedCategory(e.target.value);
-  // };
-
-  // Fetch user data from localStorage/session
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      try {
-        const parsedUser = JSON.parse(user);
-        setUserLoggedIn(true);
-        setUserName(parsedUser.name || "User");
-        setUserRole(parsedUser.role || "customer"); // role saved during login
-      } catch (e) {
-        console.error("Error parsing user from localStorage", e);
-      }
-    }
-  }, []);
 
   //fetch user location
   const [location, setLocation] = useState("Fetching location...");
@@ -91,11 +69,8 @@ const Header: React.FC = () => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUserLoggedIn(false);
-    setUserName("Guest");
-    setUserRole(null);
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
@@ -147,18 +122,20 @@ const Header: React.FC = () => {
           <div className="icon-text">
             <FaMapMarkedAlt className="icon" /> {location}
           </div>
-          {/* <div className="icon-text">
-            <FaUser className="icon" /> {userRole === "admin" ? "Admin" : "Customer"}
-          </div> */}
-          {userLoggedIn ? (
+          <div className="icon-text">
+            <FaUser className="icon" />
+            { user ? (user.name || user.email) : 'Guest'}
+            {user?.role === "admin" && <span className="admin-badge">(Admin)</span>}
+          </div>
+          {user ? (
             <div className="user-info">
-              <span>Hello, {userName}</span>
-              {userRole === "customer" && (
+              <span>Hello, {user.name || user.email}</span>
+              {user.role === "customer" && (
                 <Link href="/track-order" className="icon-text">
                   <FaTruck className="icon" /> Track Order
                 </Link>
               )}
-              {userRole === "admin" && (
+              {user.role === "admin" && (
                 <Link href="/admin" className="icon-text">
                   Admin Dashboard
                 </Link>
@@ -167,13 +144,8 @@ const Header: React.FC = () => {
             </div>
           ) : (
             <>
-              <Link href="/login" className="icon-link">
-                Login
-              </Link>
-              |
-              <Link href="/signup" className="icon-link">
-                Signup
-              </Link>
+              <Link href="/login" className="icon-link">Login</Link> |{" "}
+              <Link href="/signup" className="icon-link">Signup</Link>
             </>
           )}
         </div>
@@ -194,46 +166,16 @@ const Header: React.FC = () => {
         {/* Dropdown Nav */}
         <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
           <ul className="nav-menu">
-            <li className="nav-item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link href="/products">Products</Link>
-            </li>
-            <li className="nav-item">
-              <Link href="/testimonials">Reviews</Link>
-            </li>
-            <li className="nav-item">
-              <Link href="/about-us">About Us</Link>
-            </li>
-            <li className="nav-item">
-              <Link href="/gallery">Gallery</Link>
-            </li>
-            {/* <li className="nav-item"><a href="#faq">FAQ</a></li>
-                        <li className="nav-item"><a href="#terms">Terms & Conditions</a></li> */}
-            <li className="nav-item">
-              <Link href="/inquiry-form">Any Inquiry?</Link>
-            </li>
+            <li className="nav-item"><Link href="/">Home</Link></li>
+            <li className="nav-item"><Link href="/products">Products</Link></li>
+            <li className="nav-item"><Link href="/testimonials">Reviews</Link></li>
+            <li className="nav-item"><Link href="/about-us">About Us</Link></li>
+            <li className="nav-item"><Link href="/gallery">Gallery</Link></li>
+            <li className="nav-item"><Link href="/inquiry-form">Any Inquiry?</Link></li>
           </ul>
         </nav>
         {/* Search Bar */}
         <div className="header-right">
-          {/* <form onSubmit={handleSearch} className="header-search-form">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search For Gifts....."
-              className="header-search-input"
-            />
-            <button
-              type="submit"
-              className="header-search-btn"
-              aria-label="Search"
-            >
-              <FaSearch />
-            </button>
-          </form> */}
           <SearchBar placeholder="Search For Gifts....." />
           {/* Login & Cart */}
           <Link href="/cart" className="icon-link">

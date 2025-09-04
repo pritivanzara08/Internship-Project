@@ -31,6 +31,16 @@ html {
   gap: 15px;
 }
 
+.admin-badge {
+  background: #ff4d4f;   /* red badge */
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  margin-left: 6px;
+  border-radius: 8px;
+}
+
 .facebook-link,
 .whatsapp-link,
 .instagram-link,
