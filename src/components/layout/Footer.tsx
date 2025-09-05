@@ -1,6 +1,6 @@
 import React from 'react';
 import '@/components/layout/Footer.css';
-import { FaFacebook, FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaWhatsapp, FaInstagram, FaYoutube } from 'react-icons/fa';
 
 const Footer: React.FC = () => (
   <footer className="new_footer">
@@ -21,6 +21,10 @@ const Footer: React.FC = () => (
       <a className="instagram-link" href="https://www.instagram.com/_gift_article/" target="_blank" rel="noopener noreferrer">
         <FaInstagram className="social-icon-instagram" />
         Instagram
+      </a>
+      <a className="youtube-link" href="https://www.youtube.com/@giftarticle2324" target="_blank" rel="noopener noreferrer">
+        <FaYoutube className="social-icon-youtube" />
+        YouTube
       </a>
     </div>
   </footer>
