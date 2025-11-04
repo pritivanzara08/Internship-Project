@@ -6,6 +6,79 @@ html {
   scroll-behavior: smooth;
 }
 
+.user-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+}
+
+.user-toggle .caret {
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  transform-origin: top right;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 150ms ease;
+  z-index: 40;
+  overflow: hidden;
+}
+
+.user-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-dropdown .dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f2f2f2;
+  font-size: 14px;
+}
+
+.user-dropdown .dropdown-item:hover,
+.user-dropdown .dropdown-item:focus {
+  background: #fafafa;
+}
+
+.user-dropdown .user-greeting {
+  font-weight: 700;
+  background: #f9f9f9;
+}
+
+.user-dropdown .logout {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  padding: 10px 14px;
+}
+
 .header {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);

@@ -2,7 +2,7 @@
 export type UserRole = 'admin' | 'customer';
 
 export interface IUser {
-  email: string;
+  email?: string;
   password: string;
   name?: string;
   firstName?: string;

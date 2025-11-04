@@ -8,7 +8,7 @@ export interface IUserDocument extends IUser, Document {
 
 const UserSchema = new Schema<IUserDocument>(
   {
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: false, unique: true, sparse: true, lowercase: true, index: true },
     password: { type: String }, // optional until OTP verified
     name: { type: String },
     firstName: { type: String },
@@ -19,7 +19,7 @@ const UserSchema = new Schema<IUserDocument>(
     state: { type: String },
     pinCode: { type: String },
     country: { type: String },
-    contactNo: { type: String },
+    contactNo: { type: String, unique: true, sparse: true },
     referral: { type: String },
 
     role: { type: String, enum: ["admin", "customer"], default: "customer" },

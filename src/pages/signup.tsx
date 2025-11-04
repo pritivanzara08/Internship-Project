@@ -1,11 +1,10 @@
-
+import '@/styles/signup.css';
+import { fetchLocationFromPincode } from '@/utils/locationApi';
+import { sendOtp, verifyOtp } from "@/utils/otpApi";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { sendOtp, verifyOtp } from "@/utils/otpApi";
-import '@/styles/signup.css';
-import { fetchLocationFromPincode } from '@/utils/locationApi';
 
 const Signup: React.FC = () => {
   const router = useRouter();
@@ -22,6 +21,16 @@ const Signup: React.FC = () => {
   const [contactNo, setContactNo] = useState('');
   const [email, setEmail] = useState('');
 
+  //Loading states
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  // OTP states
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+
   // Auto-fetch location on pinCode change
   const handlePinCodeChange = async (value: string) => {
     const onlyNumbers = value.replace(/\D/g, '');
@@ -29,9 +38,9 @@ const Signup: React.FC = () => {
       setPinCode(onlyNumbers);
       if (onlyNumbers.length === 6) {
         try {
-          const { state, country} = await fetchLocationFromPincode(onlyNumbers);
-          setState(state);
-          setCountry(country);
+          const { state: fetchedState, country: fetchedCountry } = await fetchLocationFromPincode(onlyNumbers);
+          setState(fetchedState || '');
+          setCountry(fetchedCountry || '');
         } catch (error) {
           console.error("Failed to fetch location:", error);
           setState('');
@@ -41,11 +50,7 @@ const Signup: React.FC = () => {
     }
   };
 
-  // OTP states
-  const [emailOtp, setEmailOtp] = useState('');
-  const [emailOtpSent, setEmailOtpSent] = useState(false);
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-
+  
   // Password states
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -63,25 +68,44 @@ const Signup: React.FC = () => {
   const validateContactNo = (contactNo: string) => /^\d{10}$/.test(contactNo);
   const validatePassword = (password: string) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
-  // Send OTP handler
-  const handleSendEmailOtp = async () => {
+ // Send OTP to phone
+  const handleSendPhoneOtp = async () => {
+    setError('');
+    if (!validateContactNo(contactNo)) {
+      setError("Please enter a valid 10 digit mobile number to receive OTP.");
+      return;
+    }
+    if (isPhoneVerified) return;
+    setSendingOtp(true);
     try {
-      await sendOtp(email);
-      Swal.fire({ icon: 'success', title: 'OTP Sent', text: 'Please check your email for the OTP.' });
-      setEmailOtpSent(true);
+      // ensure sendOtp accepts phone numbers (adjust utils if needed)
+      await sendOtp(contactNo);
+      Swal.fire({ icon: 'success', title: 'OTP Sent', text: 'Please check your phone for the OTP.' });
+      setOtpSent(true);
     } catch (error: any) {
-      Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+      Swal.fire({ icon: 'error', title: 'Error', text: error?.message || 'Failed to send OTP. Please try again.' });
+    } finally {
+      setSendingOtp(false);
     }
   };
 
   // Verify OTP handler
-  const handleVerifyEmailOtp = async () => {
+  const handleVerifyPhoneOtp = async () => {
+    setError('');
+    if (!otp) {
+      setError("Please enter the OTP sent to your phone.");
+      return;
+    }
+    setVerifyingOtp(true);
     try {
-      await verifyOtp(email, emailOtp, password, firstName + ' ' + lastName);
-      Swal.fire({ icon: 'success', title: 'Verified', text: 'Email verified successfully!' });
-      setIsEmailVerified(true);
+      await verifyOtp(contactNo, otp);
+      Swal.fire({ icon: 'success', title: 'Verified', text: 'Phone number verified successfully!' });
+      setIsPhoneVerified(true);
+      setOtpSent(false); // hide OTP input after successful verification
     } catch (error: any) {
-      Swal.fire({ icon: 'error', title: 'Invalid OTP', text: error.message });
+      Swal.fire({ icon: 'error', title: 'Invalid OTP', text: error?.message || 'The OTP you entered is incorrect. Please try again.' });
+    } finally {
+      setVerifyingOtp(false);
     }
   };
 
@@ -90,33 +114,30 @@ const Signup: React.FC = () => {
     e.preventDefault();
     setError('');
 
+    // sanitize contact number
+    const contact = (contactNo || "").replace(/\D/g, "").slice(0, 10);
+    console.log("Signup attempt payload:", {
+      firstName,
+      lastName,
+      email,
+      password,
+      contact,
+      address,
+      landmark,
+      city,
+      state,
+      pinCode,
+      country,
+      referral,
+    });
+
     // Basic field validation
-    if (!firstName || !lastName || !address || !landmark || !city || !state || !pinCode || !country) {
-      setError("Please fill in all required fields.");
+    if (!firstName || !lastName || !password || !contact) {
+      setError("Please fill required fields (first name, last name, password, mobile).");
       return;
     }
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    if (!validatePinCode(pinCode)) {
-      setError("Please enter a valid pin code.");
-      return;
-    }
-    if (!validateContactNo(contactNo)) {
-      setError("Please enter a valid contact number.");
-      return;
-    }
-    if (!isEmailVerified) {
-      setError("Please verify your email before signing up.");
-      return;
-    }
-    if (!validatePassword(password)) {
-      setError("Password must be at least 8 characters, include 1 uppercase, 1 lowercase, and 1 number.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (!/^\d{10}$/.test(contact)) {
+      setError("Please enter a valid 10 digit mobile number.");
       return;
     }
 
@@ -137,24 +158,41 @@ const Signup: React.FC = () => {
   };
 
     // MongoDB registration via API
+  setSubmitting(true);
   try {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        address,
+        landmark,
+        city,
+        state,
+        pinCode,
+        country,
+        contactNo: contact,
+        referral,
+      }),
     });
 
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Signup failed");
-    // Success
-    Swal.fire({
-      icon: 'success',
-      title: 'SignUp Successful',
-      text: 'Welcome to Gift-Article! Your account has been created successfully.',
-    });
-      router.push('/login');
-    } catch (error: any) {
-    setError(error.message);
+    console.log("Signup response:", res.status, data);
+    if (!res.ok) {
+      setError(data?.message || "Signup failed");
+      setSubmitting(false);
+      return;
+    }
+    // success -> redirect to login or dashboard
+    router.push("/login");
+  } catch (err: any) {
+    console.error("Signup error:", err);
+    setError(err?.message || "Server error");
+  } finally {
+    setSubmitting(false);
   }
 };
 
@@ -162,228 +200,97 @@ const Signup: React.FC = () => {
     <div className="signup-wrapper">
       <div className="signup-container">
         <div className="signup-side">
-          <Link href="/">
-            <img src="/images/logo.png" alt="Logo" className="logo-img" />
-          </Link>
-          <h2 className="signup-title">🎁 Create a New Account</h2>
-          <p className="signup-subtitle">Join us to enjoy secure shopping with Gift-Article!</p>
-        </div>
-        {error && <div className="error">{error}</div>}
-        <form onSubmit={handleSignup} className="signup-form">
-
-          {/* Name Fields */}
-          <div className="name-fields">
-            <div className="form-group">
-              <label>First Name</label>
-              <input
-                id="firstName"
-                type="text"
-                placeholder="First Name"
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Last Name</label>
-              <input
-                id="lastName"
-                type="text"
-                placeholder="Last Name"
-                value={lastName}
-                onChange={e => setLastName(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Address Fields */}
-            <div className="form-group">
-              <label>Address</label>
-              <input
-                id="address"
-                type="text"
-                placeholder="Address"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                required
-              />
-            </div>
-          <div className="name-fields">
-            <div className="form-group">
-              <label>Landmark</label>
-              <input
-                id="landmark"
-                type="text"
-                placeholder="Landmark"
-                value={landmark}
-                onChange={e => setLandmark(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>City</label>
-              <input
-                id="city"
-                type="text"
-                placeholder="City"
-                value={city}
-                onChange={e => {
-                  if (e.target.value.length <= 30) setCity(e.target.value);
-                }}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Location Fields */}
-          <div className="location-container">
-            <div className="form-group small-field">
-              <label>State</label>
-              <input
-                id="state"
-                type="text"
-                placeholder="State"
-                value={state}
-                onChange={e => {
-                  if (e.target.value.length <= 30) setState(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="form-group small-field">
-              <label>Pin Code</label>
-              <input
-                id="pinCode"
-                type="text"
-                placeholder="Pin Code"
-                value={pinCode}
-                onChange={(e) => handlePinCodeChange(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group small-field">
-            <label>Country</label>
-            <input
-              id="country"
-              type="text"
-              placeholder="Country"
-              value={country}
-              onChange={e => setCountry(e.target.value)}
-              required
-            />
-          </div>
-          </div>
-
-          {/* Contact */}
-          <div className="form-group">
-            <label>Contact Number</label>
-            <input
-              id="contactNo"
-              type="text"
-              placeholder="Contact Number"
-              value={contactNo}
-              onChange={e => setContactNo(e.target.value)}
-              maxLength={10}
-              required
-            />
-          </div>
-
-          {/* Email & OTP */}
-          <div className="form-group">
-            <label>Email</label>
-            <div className="email-input-container">
-              <input
-                type="email"
-                value={email}
-                onChange={e => {
-                  setEmail(e.target.value);
-                  setIsEmailVerified(false);
-                }}
-                disabled={isEmailVerified}
-                required
-              />
-              {!emailOtpSent && (
-                <button type="button" className="send-otp-button" onClick={handleSendEmailOtp}>
-                  Send OTP
-                </button>
-              )}
-              {emailOtpSent && !isEmailVerified && (
-                <>
+        <div className="signup-form-panel">
+          {error && <div className="error">{error}</div>}
+          <form onSubmit={handleSignup} className="signup-form">
+            {/* --- Step 1: Mobile + OTP --- */}
+            {!isPhoneVerified && (
+              <div className="form-group">
+                <label>Mobile Number</label>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <input
-                    id="otp-input"
-                    value={emailOtp}
-                    onChange={e => setEmailOtp(e.target.value)}
-                    className="otp-input"
-                    placeholder="Enter OTP"
+                    id="contactNo"
+                    type="text"
+                    placeholder="Enter 10 digit mobile number"
+                    value={contactNo}
+                    onChange={e => setContactNo(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    maxLength={10}
+                    required
                   />
-                  <button
-                    type="button"
-                    className="verify-otp-button"
-                    onClick={handleVerifyEmailOtp}
-                  >
-                    Verify OTP
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-          {isEmailVerified && (
-            <p style={{ color: 'green' }}>Email verified ✅</p>
-          )}
+                  {!otpSent && (
+                    <button type="button" className="send-otp-button" onClick={handleSendPhoneOtp} disabled={sendingOtp}>
+                      {sendingOtp ? 'Sending...' : 'Send OTP'}
+                    </button>
+                  )}
+                </div>
+                {otpSent && (
+                  <div className="email-otp-row" style={{ marginTop: 8 }}>
+                    <input
+                      id="otp-input"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      className="otp-input"
+                      placeholder="Enter OTP"
+                      aria-label="OTP"
+                    />
+                    <button
+                      type="button"
+                      className="verify-otp-button"
+                      onClick={handleVerifyPhoneOtp}
+                      disabled={verifyingOtp}
+                    >
+                      {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
-          {/* Password Fields */}
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              onFocus={() => setShowPasswordWarning(true)}
-              onBlur={() => setShowPasswordWarning(false)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <input
-              type={showConfirmPassword ? 'text' : 'password'}
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <label>
-            <input
-              type="checkbox"
-              onChange={() => setShowConfirmPassword(!showConfirmPassword)}
-            />
-            Show Confirm Password
-          </label>
+            {/* --- Step 2: show the rest of the form only after phone is verified --- */}
+            {isPhoneVerified && (
+              <>
+                {/* Name Fields */}
+                <div className="name-fields">
+                  <div className="form-group">
+                    <label>First Name</label>
+                    <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Last Name</label>
+                    <input id="lastName" type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} required />
+                  </div>
+                </div>
 
-          {/* Referral */}
-          <div className="referral-container">
-            <label>How did you hear about us?</label>
-            <select value={referral} onChange={e => setReferral(e.target.value)}>
-              <option value="">Select an option</option>
-              <option value="facebook">Facebook</option>
-              <option value="instagram">Instagram</option>
-              <option value="google">Google</option>
-              <option value="friends">Friends</option>
-              <option value="family">Family</option>
-            </select>
-          </div>
+                {/* Date of Birth (added per screenshot) */}
+                <div className="form-group">
+                  <label>Date of Birth</label>
+                  <input id="dob" type="date" onChange={e => {/* you can store DOB if you want */}} />
+                </div>
 
-          {/* Submit & Auth Switch */}
-          <button type="submit" className="auth-button">Sign Up</button>
-          <div className="auth-switch">
-            <p>
-              Already have an account? <a href="/login">Login</a>
-            </p>
-          </div>
-        </form>
+                {/* Email (no OTP here) */}
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                </div>
+
+              </>
+            )}
+            {/* Actions (submit button shown only after phone verified) */}
+            {isPhoneVerified && (
+              <div className="form-actions" style={{ marginTop: 16}}>
+                <button type="submit" className="auth-button" disabled={submitting}>
+                  {submitting ? 'Creating Account...' : 'Sign Up'}
+                </button>
+                <div className="auth-switch" style={{ marginTop: 10}}>
+                  Already have an account? <Link href="/login">Login</Link>
+                </div>
+              </div>
+            )}
+          </form>
       </div>
     </div>
+  </div>
+  </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import "@/components/layout/Header.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   FaEnvelope,
   FaFacebook,
@@ -23,8 +23,11 @@ const Header: React.FC = () => {
 
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleUserMenu = () => setUserMenuOpen((s) => !s);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +35,17 @@ const Header: React.FC = () => {
       router.push(`/search?query=${encodeURIComponent(search)}`);
     }
   };
+
+  //close user menu on outside click
+  useEffect(() => {
+    function onDoc(e: MouseEvent) {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("click", onDoc);
+    return () => document.removeEventListener("click", onDoc);
+  }, []);
 
   //fetch user location
   const [location, setLocation] = useState("Fetching location...");
@@ -122,34 +136,40 @@ const Header: React.FC = () => {
           <div className="icon-text">
             <FaMapMarkedAlt className="icon" /> {location}
           </div>
-          <div className="icon-text">
-            <FaUser className="icon" />
-            { user ? (user.name || user.email) : 'Guest'}
-            {user?.role === "admin" && <span className="admin-badge">(Admin)</span>}
-          </div>
-          {user ? (
-            <div className="user-info">
-              <span>Hello, {user.name || user.email}</span>
-              {user.role === "customer" && (
-                <Link href="/track-order" className="icon-text">
-                  <FaTruck className="icon" /> Track Order
-                </Link>
+
+          <div className="user-dropdown-wrapper" ref={userMenuRef}>
+            <button className="user-toggle" onClick={toggleUserMenu}>
+              <FaUser className="icon" />
+                { user ? (user.name || user.email) : "Hello Guest"}
+                <span className="caret"> ▼</span>
+            </button>
+            <div className={`user-dropdown ${userMenuOpen ? "open" : ""}`}>
+              {user ? (
+                <>
+                  <div className="dropdown-item user-greeting">{user.name || user.email}</div>
+                  <Link href="/my-account" className="dropdown-item">My Account</Link>
+                  <Link href="/gift-cash" className="dropdown-item">Gift Cash</Link>
+                  <Link href="/orders" className="dropdown-item">My Orders</Link>
+                  <Link href="/contact" className="dropdown-item">Contact Us</Link>
+                  <Link href="/faqs" className="dropdown-item">FAQs</Link>
+                  {user.role === "admin" && <Link href="/admin" className="dropdown-item">Admin Dashboard</Link>}
+                  <button className="dropdown-item logout" onClick={handleLogout}>Logout</button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="dropdown-item">Login / Register</Link>
+                  <Link href="/my-account" className="dropdown-item">My Account</Link>
+                  <Link href="/gift-cash" className="dropdown-item">Gift Cash</Link>
+                  <Link href="/orders" className="dropdown-item">My Orders</Link>
+                  <Link href="/contact" className="dropdown-item">Contact Us</Link>
+                  <Link href="/faqs" className="dropdown-item">FAQs</Link>
+                </>
               )}
-              {user.role === "admin" && (
-                <Link href="/admin" className="icon-text">
-                  Admin Dashboard
-                </Link>
-              )}
-              <button onClick={handleLogout}>Logout</button>
             </div>
-          ) : (
-            <>
-              <Link href="/login" className="icon-link">Login</Link> |{" "}
-              <Link href="/signup" className="icon-link">Signup</Link>
-            </>
-          )}
+          </div>
         </div>
       </div>
+
       <div className="header-container">
         <div className="header-left">
           <button className="mobile-menu-button" onClick={toggleMenu}>

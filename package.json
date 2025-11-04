@@ -38,7 +38,8 @@
     "stripe": "^18.2.1",
     "styled-components": "^6.1.19",
     "sweetalert2": "^11.22.2",
-    "swiper": "^11.2.10"
+    "swiper": "^11.2.10",
+    "twilio": "^5.10.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
