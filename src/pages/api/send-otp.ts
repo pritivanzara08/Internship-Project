@@ -85,15 +85,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const smsResult = await smsModule.sendSms(String(contactNo), `Your OTP code is: ${otp}. It expires in 5 minutes.`);
         console.log(`SMS send result for ${contactNo}:`, smsResult);
         // If your sendSms returns falsy on failure adjust this check
-        if (!smsResult) {
+        if (!smsResult || smsResult === false) {
           // still return success but warn client (or change to error if you prefer)
-          return res.status(200).json({ message: "OTP saved. SMS send failed (check sms provider)" });
+          //return res.status(200).json({ message: "OTP saved. SMS send failed (check sms provider)" });
+          
+          // return error so UI shows failure instead of success
+          return res.status(500).json({ message: "Failed to send OTP via SMS. Check sms provider configuration." });
         }
         return res.status(200).json({ message: "OTP sent successfully (sms)" });
       }
-    } catch (err) {
+    } catch (err: any) {
       // sendSms util not present or failed to import — fall through to logging
-      console.log("sendSms util not available, OTP:", otp);
+      console.log("SMS provider error:", err);
+      return res.status(500).json({ message: `SMS provider error: ${err?.message || err}` });
     }
 
       // If no SMS provider available just log OTP (for development) and return success

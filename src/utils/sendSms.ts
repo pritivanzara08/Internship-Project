@@ -1,32 +1,40 @@
-
 export const sendSms = async (contactNo: string, message: string) => {
- 
   const toNumber = contactNo.startsWith("+") ? contactNo : `+91${contactNo.replace(/\D/g, "")}`;
 
-  // If Twilio env vars are set, send via Twilio
   const SID = process.env.TWILIO_ACCOUNT_SID;
   const TOKEN = process.env.TWILIO_AUTH_TOKEN;
-  const FROM = process.env.TWILIO_FROM_NUMBER;
+  const FROM = process.env.TWILIO_FROM_NUMBER; // Twilio phone number (E.164) - required if messaging service not used
+  const MSG_SERVICE = process.env.TWILIO_MESSAGING_SERVICE_SID; // optional
 
-  if (SID && TOKEN && FROM) {
+  if (SID && TOKEN && (MSG_SERVICE || FROM)) {
     try {
-      
+      // dynamic require to avoid build-time dependency
+      // (npm i twilio in environments where you use it)
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const Twilio = require("twilio");
       const client = Twilio(SID, TOKEN);
-      const msg = await client.messages.create({
+
+      const payload: any = {
         body: message,
-        from: FROM,
         to: toNumber,
-      });
+      };
+      if (MSG_SERVICE) {
+        payload.messagingServiceSid = MSG_SERVICE;
+      } else {
+        payload.from = FROM;
+      }
+
+      const msg = await client.messages.create(payload);
       console.log("Twilio SMS sent, sid:", msg?.sid);
       return true;
-    } catch (err) {
+    } catch (err: any) {
       console.error("Twilio sendSms error:", err);
+      // inspect err.code / err.message in logs — 21659 means invalid From
       return false;
     }
   }
 
-  // Fallback / dev: log OTP to server console (useful for local testing)
+  // fallback for local dev
   console.log(`[mock sendSms] to ${toNumber}: ${message}`);
   return true;
 };

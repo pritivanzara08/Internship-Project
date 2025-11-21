@@ -20,6 +20,7 @@ const Signup: React.FC = () => {
   const [country, setCountry] = useState('');
   const [contactNo, setContactNo] = useState('');
   const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
 
   //Loading states
   const [sendingOtp, setSendingOtp] = useState(false);
@@ -54,8 +55,8 @@ const Signup: React.FC = () => {
   // Password states
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState('');
   const [showPasswordWarning, setShowPasswordWarning] = useState(false);
 
   // Other states
@@ -175,6 +176,7 @@ const Signup: React.FC = () => {
         pinCode,
         country,
         contactNo: contact,
+        dob,
         referral,
       }),
     });
@@ -261,10 +263,10 @@ const Signup: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Date of Birth (added per screenshot) */}
+                {/* Date of Birth */}
                 <div className="form-group">
                   <label>Date of Birth</label>
-                  <input id="dob" type="date" onChange={e => {/* you can store DOB if you want */}} />
+                   <input id="dob" type="date" value={dob} onChange={e => setDob(e.target.value)} />
                 </div>
 
                 {/* Email (no OTP here) */}
@@ -273,6 +275,34 @@ const Signup: React.FC = () => {
                   <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
 
+               {/* Password */}
+               <div className="form-group">
+                 <label>Password</label>
+                 <input
+                   type={showPassword ? 'text' : 'password'}
+                   value={password}
+                   onChange={e => setPassword(e.target.value)}
+                   required
+                 />
+               </div>
+               <div className="form-group">
+                 <label>Confirm Password</label>
+                 <input
+                   type={showPassword ? 'text' : 'password'}
+                   value={confirmPassword}
+                   onChange={e => setConfirmPassword(e.target.value)}
+                   required
+                 />
+               </div>
+               <label style={{ display: 'block', marginTop: 8 }}>
+                 <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(s => !s)} /> Show password
+               </label>
+
+               {/* Show verified mobile (read-only) */}
+               <div className="form-group">
+                 <label>Mobile</label>
+                 <input type="text" value={contactNo} readOnly />
+               </div>
               </>
             )}
             {/* Actions (submit button shown only after phone verified) */}
