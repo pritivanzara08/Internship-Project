@@ -41,7 +41,7 @@ const ContactUs = () => {
             </div>
             <h3>General Enquiries</h3>
             <p>
-              Email: <a href="mailto:info@example.com">info@example.com</a>
+              Email: <a href="mailto:info@giftarticle.com">info@giftarticle.com</a>
             </p>
           </div>
           {/* Call Us */}
@@ -54,9 +54,9 @@ const ContactUs = () => {
             </div>
             <h3>Call Us</h3>
             <p>
-              +91 98765 43210
+              +91 9054344963
               <br />
-              +91 91234 56789
+              +91 7016088466
             </p>
           </div>
           {/* Our Timing */}
@@ -69,7 +69,7 @@ const ContactUs = () => {
             </div>
             <h3>Our Timing</h3>
             <p>
-              Mon - Sat: 10:00 AM - 8:00 PM
+              Mon - Sat: 09:00 AM - 09:00 PM
               <br />
               Sunday: Closed
             </p>

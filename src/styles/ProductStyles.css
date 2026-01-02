@@ -1,15 +1,13 @@
 .beautiful-title {
   font-family: "Dancing Script";
   font-size: 2.8rem;
-  color: #000000;
+  color: #CC3B25;
   text-align: center;
   margin-bottom: 0.5em;
   letter-spacing: 1px;
-  text-shadow: 1px 2px 8px #e1bee7;
-  font-style: italic;
+  text-shadow: 1px 2px 8px #dd958a;
   src: url('/fonts/dancing-script.woff2') format('woff2');
   border-bottom: 2px solid #fbe9d5;
-  /* display: inline-block; */
   padding-bottom: 0.3em;
 }
 
@@ -103,7 +101,7 @@
 
 .product-card-price {
   font-size: 1.08rem;
-  color: #4361ee;
+  color: #CC3B25;
   font-weight: 700;
   margin-bottom: 0.8rem;
 }
@@ -131,8 +129,8 @@
   transform: translateY(-50%);
   z-index: 10;
   background: #fff;
-  border: 1px solid #4361ee;
-  color: #4361ee;
+  border: 1px solid #CC3B25;
+  color: #CC3B25;
   border-radius: 50%;
   width: 38px;
   height: 38px;
@@ -146,7 +144,7 @@
 }
 
 .scroll-btn:hover {
-  background: #4361ee;
+  background: #CC3B25;
   color: #fff;
 }
 
