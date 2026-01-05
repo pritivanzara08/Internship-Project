@@ -48,7 +48,7 @@
   margin-bottom: 24px;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #2563eb;
+  color: #dc2626;
   text-align: center;
 }
 
@@ -107,7 +107,7 @@ input[type='password']:focus {
 
 .auth-button {
   width: 100%;
-  background-color: #2563eb;
+  background-color: #dd958a;
   color: white;
   font-weight: 700;
   padding: 14px;
@@ -119,7 +119,7 @@ input[type='password']:focus {
 }
 
 .auth-button:hover {
-  background-color: #1e40af;
+  background-color: #dc2626;
 }
 
 .auth-switch {
@@ -130,7 +130,7 @@ input[type='password']:focus {
 }
 
 .auth-switch a {
-  color: #2563eb;
+  color: #dc2626;
   font-weight: 600;
   text-decoration: none;
 }

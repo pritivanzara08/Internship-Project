@@ -123,7 +123,7 @@
 
 .arrow-prev:hover,
 .arrow-next:hover {
-  background: #007bff;
+  background: #cc3b25;
 }
 
 .arrow-prev {
@@ -157,7 +157,7 @@
 }
 
 .dot.activeDot {
-  background: #007bff;
+  background: #cc3b25;
   transform: scale(1.15);
 }
 
@@ -382,7 +382,7 @@
 }
 
 .product-card button {
-  background-color: #0070f3;
+  background-color: #dd958a;
   color: white;
   border: none;
   padding: 0.5rem 0.9rem;
@@ -392,7 +392,7 @@
 }
 
 .product-card button:hover {
-  background-color: #005ecb;
+  background-color: #dc2626;
 }
 
 /* Pagination */
@@ -933,7 +933,7 @@ input[type="tel"] {
 }
 
 .links-group ul li a:hover {
-  color: #007bff;
+  color: #cc3b25;
   text-decoration: underline;
 }
 

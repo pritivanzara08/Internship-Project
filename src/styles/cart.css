@@ -115,7 +115,8 @@
 }
 
 .cart-checkout-btn {
-  background-color: #2563eb; /* Tailwind blue-600 */
+  background-color: #dc2626; /* Tailwind blue-600 */
+  align-items: center;
   color: #fff;
   padding: 12px 24px;
   font-size: 1rem;
@@ -124,10 +125,11 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  animation: pulse 2s ease-in-out infinite 0.5s;
 }
 
 .cart-checkout-btn:hover {
-  background-color: #1d4ed8; /* Tailwind blue-700 */
+  background-color: #dd958a; /* Tailwind blue-700 */
   transform: translateY(-1px);
 }
 

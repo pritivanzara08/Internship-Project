@@ -55,8 +55,8 @@ const Signup: React.FC = () => {
   // Password states
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState('');
-  const [showConfirmPassword, setShowConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPasswordWarning, setShowPasswordWarning] = useState(false);
 
   // Other states
@@ -198,6 +198,17 @@ const Signup: React.FC = () => {
   }
 };
 
+  // simple password strength
+  const getPasswordStrength = (pw: string) => {
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const labels = ['Too weak', 'Weak', 'Okay', 'Strong', 'Very strong'];
+    return { score, label: labels[score] || 'Too weak' };
+  };
+
   return (
     <div className="signup-wrapper">
       <div className="signup-container">
@@ -284,6 +295,10 @@ const Signup: React.FC = () => {
                    onChange={e => setPassword(e.target.value)}
                    required
                  />
+                 <div className="pwd-meter">
+                   <div className={`meter-bar m-${getPasswordStrength(password).score}`} />
+                   <div className="meter-label">{getPasswordStrength(password).label}</div>
+                 </div>
                </div>
                <div className="form-group">
                  <label>Confirm Password</label>
@@ -294,7 +309,7 @@ const Signup: React.FC = () => {
                    required
                  />
                </div>
-               <label style={{ display: 'block', marginTop: 8 }}>
+               <label className="show-pass">
                  <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(s => !s)} /> Show password
                </label>
 
@@ -308,8 +323,8 @@ const Signup: React.FC = () => {
             {/* Actions (submit button shown only after phone verified) */}
             {isPhoneVerified && (
               <div className="form-actions" style={{ marginTop: 16}}>
-                <button type="submit" className="auth-button" disabled={submitting}>
-                  {submitting ? 'Creating Account...' : 'Sign Up'}
+                <button type="submit" className="primary-btn" disabled={submitting}>
+                  {submitting ? 'Creating Account...' : 'Create Account'}
                 </button>
                 <div className="auth-switch" style={{ marginTop: 10}}>
                   Already have an account? <Link href="/login">Login</Link>
