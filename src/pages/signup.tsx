@@ -1,5 +1,4 @@
 import '@/styles/signup.css';
-import { fetchLocationFromPincode } from '@/utils/locationApi';
 import { sendOtp, verifyOtp } from "@/utils/otpApi";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -31,49 +30,23 @@ const Signup: React.FC = () => {
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-
-  // Auto-fetch location on pinCode change
-  const handlePinCodeChange = async (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    if (onlyNumbers.length <= 6) {
-      setPinCode(onlyNumbers);
-      if (onlyNumbers.length === 6) {
-        try {
-          const { state: fetchedState, country: fetchedCountry } = await fetchLocationFromPincode(onlyNumbers);
-          setState(fetchedState || '');
-          setCountry(fetchedCountry || '');
-        } catch (error) {
-          console.error("Failed to fetch location:", error);
-          setState('');
-          setCountry('');
-        }
-      }
-    }
-  };
-
   
-  // Password states
+  // Other states
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [agreement, setAgreement] = useState(false);
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showPasswordWarning, setShowPasswordWarning] = useState(false);
-
-  // Other states
-  const [referral, setReferral] = useState('');
-  const [error, setError] = useState('');
-
   // Validation functions
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePinCode = (pinCode: string) => /^[1-9][0-9]{5}$/.test(pinCode);
   const validateContactNo = (contactNo: string) => /^\d{10}$/.test(contactNo);
-  const validatePassword = (password: string) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
  // Send OTP to phone
   const handleSendPhoneOtp = async () => {
     setError('');
     if (!validateContactNo(contactNo)) {
-      setError("Please enter a valid 10 digit mobile number to receive OTP.");
+      setError("Please enter a valid 10 digit mobile number.");
       return;
     }
     if (isPhoneVerified) return;
@@ -84,7 +57,7 @@ const Signup: React.FC = () => {
       Swal.fire({ icon: 'success', title: 'OTP Sent', text: 'Please check your phone for the OTP.' });
       setOtpSent(true);
     } catch (error: any) {
-      Swal.fire({ icon: 'error', title: 'Error', text: error?.message || 'Failed to send OTP. Please try again.' });
+      Swal.fire({ icon: 'error', title: 'Error', text: error?.message || 'Failed to send OTP.' });
     } finally {
       setSendingOtp(false);
     }
@@ -104,7 +77,7 @@ const Signup: React.FC = () => {
       setIsPhoneVerified(true);
       setOtpSent(false); // hide OTP input after successful verification
     } catch (error: any) {
-      Swal.fire({ icon: 'error', title: 'Invalid OTP', text: error?.message || 'The OTP you entered is incorrect. Please try again.' });
+      Swal.fire({ icon: 'error', title: 'Invalid OTP', text: error?.message || 'The OTP you entered is incorrect.' });
     } finally {
       setVerifyingOtp(false);
     }
@@ -114,7 +87,9 @@ const Signup: React.FC = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
+    if (!agreement) {
+      setError("You must agree to the terms and conditions.");
+    }
     // sanitize contact number
     const contact = (contactNo || "").replace(/\D/g, "").slice(0, 10);
     console.log("Signup attempt payload:", {
@@ -129,12 +104,12 @@ const Signup: React.FC = () => {
       state,
       pinCode,
       country,
-      referral,
+      dob,
     });
 
     // Basic field validation
-    if (!firstName || !lastName || !password || !contact) {
-      setError("Please fill required fields (first name, last name, password, mobile).");
+    if (!firstName || !lastName || !password || !contact || !email || !isPhoneVerified) {
+      setError("All fields are required and phone must be verified.).");
       return;
     }
     if (!/^\d{10}$/.test(contact)) {
@@ -155,43 +130,26 @@ const Signup: React.FC = () => {
     pinCode,
     country,
     contactNo,
-    // include other fields if your backend supports them
+    dob
   };
-
-    // MongoDB registration via API
   setSubmitting(true);
   try {
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-        address,
-        landmark,
-        city,
-        state,
-        pinCode,
-        country,
-        contactNo: contact,
-        dob,
-        referral,
-      }),
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json();
-    console.log("Signup response:", res.status, data);
+    // console.log("Signup response:", res.status, data);
     if (!res.ok) {
       setError(data?.message || "Signup failed");
-      setSubmitting(false);
+      // setSubmitting(false);
       return;
     }
-    // success -> redirect to login or dashboard
     router.push("/login");
   } catch (err: any) {
-    console.error("Signup error:", err);
+    // console.error("Signup error:", err);
     setError(err?.message || "Server error");
   } finally {
     setSubmitting(false);
@@ -212,131 +170,148 @@ const Signup: React.FC = () => {
   return (
     <div className="signup-wrapper">
       <div className="signup-container">
-        <div className="signup-side">
-        <div className="signup-form-panel">
-          {error && <div className="error">{error}</div>}
-          <form onSubmit={handleSignup} className="signup-form">
-            {/* --- Step 1: Mobile + OTP --- */}
-            {!isPhoneVerified && (
-              <div className="form-group">
-                <label>Mobile Number</label>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <input
-                    id="contactNo"
-                    type="text"
-                    placeholder="Enter 10 digit mobile number"
-                    value={contactNo}
-                    onChange={e => setContactNo(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    maxLength={10}
-                    required
-                  />
-                  {!otpSent && (
-                    <button type="button" className="send-otp-button" onClick={handleSendPhoneOtp} disabled={sendingOtp}>
-                      {sendingOtp ? 'Sending...' : 'Send OTP'}
-                    </button>
-                  )}
-                </div>
-                {otpSent && (
-                  <div className="email-otp-row" style={{ marginTop: 8 }}>
-                    <input
-                      id="otp-input"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                      className="otp-input"
-                      placeholder="Enter OTP"
-                      aria-label="OTP"
-                    />
-                    <button
-                      type="button"
-                      className="verify-otp-button"
-                      onClick={handleVerifyPhoneOtp}
-                      disabled={verifyingOtp}
-                    >
-                      {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* --- Step 2: show the rest of the form only after phone is verified --- */}
-            {isPhoneVerified && (
-              <>
-                {/* Name Fields */}
-                <div className="name-fields">
-                  <div className="form-group">
-                    <label>First Name</label>
-                    <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} required />
-                  </div>
-                  <div className="form-group">
-                    <label>Last Name</label>
-                    <input id="lastName" type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} required />
-                  </div>
-                </div>
-
-                {/* Date of Birth */}
-                <div className="form-group">
-                  <label>Date of Birth</label>
-                   <input id="dob" type="date" value={dob} onChange={e => setDob(e.target.value)} />
-                </div>
-
-                {/* Email (no OTP here) */}
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-                </div>
-
-               {/* Password */}
-               <div className="form-group">
-                 <label>Password</label>
-                 <input
-                   type={showPassword ? 'text' : 'password'}
-                   value={password}
-                   onChange={e => setPassword(e.target.value)}
-                   required
-                 />
-                 <div className="pwd-meter">
-                   <div className={`meter-bar m-${getPasswordStrength(password).score}`} />
-                   <div className="meter-label">{getPasswordStrength(password).label}</div>
-                 </div>
-               </div>
-               <div className="form-group">
-                 <label>Confirm Password</label>
-                 <input
-                   type={showPassword ? 'text' : 'password'}
-                   value={confirmPassword}
-                   onChange={e => setConfirmPassword(e.target.value)}
-                   required
-                 />
-               </div>
-               <label className="show-pass">
-                 <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(s => !s)} /> Show password
-               </label>
-
-               {/* Show verified mobile (read-only) */}
-               <div className="form-group">
-                 <label>Mobile</label>
-                 <input type="text" value={contactNo} readOnly />
-               </div>
-              </>
-            )}
-            {/* Actions (submit button shown only after phone verified) */}
-            {isPhoneVerified && (
-              <div className="form-actions" style={{ marginTop: 16}}>
-                <button type="submit" className="primary-btn" disabled={submitting}>
-                  {submitting ? 'Creating Account...' : 'Create Account'}
+        <h2>Create Your Account</h2>
+        {error && <div className="error">{error}</div>}
+      <form onSubmit={handleSignup} className="signup-form">
+        {/* Mobile Number and OTP */}
+        {!isPhoneVerified && (
+          <>
+            <div className="form-group">
+              <label>Mobile Number</label>
+              <input
+                id="contactNo"
+                type="number"
+                placeholder="Enter 10 digit mobile number"
+                value={contactNo}
+                onChange={e => setContactNo(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                maxLength={10}
+                required
+              />
+              <button type="button" className="send-otp-button" onClick={handleSendPhoneOtp} disabled={sendingOtp}>
+                {sendingOtp ? 'Sending OTP...' : 'Send OTP'}
+              </button>
+            </div>
+            {otpSent && (
+              <div className="otp-input-group">
+                <input
+                  id="otp-input"
+                  className="otp-input"
+                  type="number"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  maxLength={6}
+                  required
+                />
+                <button type="button" className="verify-otp-button" onClick={handleVerifyPhoneOtp} disabled={verifyingOtp}>
+                  {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
                 </button>
-                <div className="auth-switch" style={{ marginTop: 10}}>
-                  Already have an account? <Link href="/login">Login</Link>
-                </div>
               </div>
             )}
-          </form>
-      </div>
+          </>
+        )}
+
+      {/* User Information Fields */}
+      {isPhoneVerified && (
+        <>
+          <div className="form-group">
+            <label>First Name</label>
+            <input
+              type="text"
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Date of Birth</label>
+            <input
+              id="dob"
+              type="date"
+              value={dob}
+              onChange={e => setDob(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+            <div className="pwd-meter">
+              <div className={`meter-bar m-${getPasswordStrength(password).score}`} />
+              <div className="meter-label">{getPasswordStrength(password).label}</div>
+            </div>
+            <div className="password-visibility">
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={() => setShowPassword(s => !s)}
+              /> Show Password
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Confirm Password</label>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+            />
+            <div className="password-visibility">
+              <input
+                type="checkbox"
+                checked={showConfirmPassword}
+                onChange={() => setShowConfirmPassword(s => !s)}
+              /> Show Password
+            </div>
+          </div>
+          <div className="form-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={agreement}
+                onChange={e => setAgreement(e.target.checked)}
+              /> I agree to the <Link href="/terms">terms and conditions</Link>.
+            </label>
+          </div>
+        </>
+      )}
+      
+      {isPhoneVerified && (
+        <button type="submit" className="primary-btn" disabled={submitting}>
+          {submitting ? 'Creating Account...' : 'Sign Up'}
+        </button>
+      )}
+    </form>
+    
+    <div className="auth-switch">
+      Already have an account? <Link href="/login">Log In</Link>
     </div>
+
   </div>
-  </div>
-  );
+</div>
+);
 };
 
 export default Signup;
