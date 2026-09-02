@@ -1,4 +1,4 @@
-import { Schema, model, models, Types } from 'mongoose';
+
 
 export interface ICartItem {
 productId: Types.ObjectId;

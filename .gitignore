@@ -48,3 +48,4 @@ dist/
 
 # Ignore build artifacts from TypeScript
 *.tsbuildinfo
+/src/generated/prisma

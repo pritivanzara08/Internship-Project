@@ -1,7 +1,7 @@
 // src/components/shop/CategorySection.tsx
 import Link from "next/link";
 import { ProductCategory } from "@/data/catalog";
-import "@/styles/theme.css"
+// import "@/styles/theme.css";
 
 interface CategorySectionProps {
   category: ProductCategory;

@@ -1,6 +1,6 @@
-import '@/components/layout/Footer.css';
-import React from 'react';
-import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa';
+import React from "react";
+import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from "react-icons/fa";
+// import "@/components/layout/Footer.css";
 
 const Footer: React.FC = () => (
   <footer className="new_footer">
@@ -10,19 +10,39 @@ const Footer: React.FC = () => (
       </span>
     </h5>
     <div className="social-icons">
-      <a className="facebook-link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+      <a
+        className="facebook-link"
+        href="https://www.facebook.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <FaFacebook className="social-icon-facebook" />
         Facebook
       </a>
-      <a className="whatsapp-link" href="https://wa.me/message/V54FWAK6EAIHK1" target="_blank" rel="noopener noreferrer">
+      <a
+        className="whatsapp-link"
+        href="https://wa.me/message/V54FWAK6EAIHK1"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <FaWhatsapp className="social-icon-whatsapp" />
         WhatsApp
       </a>
-      <a className="instagram-link" href="https://www.instagram.com/_gift_article/" target="_blank" rel="noopener noreferrer">
+      <a
+        className="instagram-link"
+        href="https://www.instagram.com/_gift_article/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <FaInstagram className="social-icon-instagram" />
         Instagram
       </a>
-      <a className="youtube-link" href="https://www.youtube.com/@giftarticle2324" target="_blank" rel="noopener noreferrer">
+      <a
+        className="youtube-link"
+        href="https://www.youtube.com/@giftarticle2324"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <FaYoutube className="social-icon-youtube" />
         YouTube
       </a>

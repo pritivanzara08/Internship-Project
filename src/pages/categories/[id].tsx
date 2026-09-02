@@ -4,7 +4,7 @@ import ProductCard from "@/components/shop/ProductCard";
 import { Product } from "@/types/admin";
 import productsData from "@/data/products";
 import categories from "@/data/catalog";
-import "@/styles/theme.css";
+// import "@/styles/theme.css";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -23,9 +23,7 @@ export default function CategoryPage() {
     if (!id) return;
 
     // Filter products by category
-    const filtered = productsData.filter(
-      (p) => p.categoryId === id
-    );
+    const filtered = productsData.filter((p) => p.categoryId === id);
 
     setCategoryProducts(filtered);
     setCurrentPage(1); // reset page when category changes

@@ -1,7 +1,7 @@
-import "@/components/layout/Header.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
+// import "@/components/layout/Header.css";
 import {
   FaEnvelope,
   FaFacebook,
@@ -12,7 +12,7 @@ import {
   FaTruck,
   FaUser,
   FaWhatsapp,
-  FaYoutube
+  FaYoutube,
 } from "react-icons/fa";
 import SearchBar from "../common/SearchBar";
 import { useAuth } from "@/context/AuthContext";
@@ -39,7 +39,10 @@ const Header: React.FC = () => {
   //close user menu on outside click
   useEffect(() => {
     function onDoc(e: MouseEvent) {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
         setUserMenuOpen(false);
       }
     }
@@ -56,11 +59,15 @@ const Header: React.FC = () => {
           const { latitude, longitude } = position.coords;
           try {
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`,
             );
             const data = await response.json();
             if (data.address) {
-              const city = data.address.city || data.address.town || data.address.village || "";
+              const city =
+                data.address.city ||
+                data.address.town ||
+                data.address.village ||
+                "";
               const state = data.address.state || "";
               setLocation(city && state ? `${city}, ${state}` : city || state);
             } else {
@@ -76,7 +83,7 @@ const Header: React.FC = () => {
           } else {
             setLocation("Unable to fetch location");
           }
-        }
+        },
       );
     } else {
       setLocation("Geolocation not supported");
@@ -140,29 +147,62 @@ const Header: React.FC = () => {
           <div className="user-dropdown-wrapper" ref={userMenuRef}>
             <button className="user-toggle" onClick={toggleUserMenu}>
               <FaUser className="icon" />
-                { user ? (user.name || user.email) : "Hello Guest"}
-                <span className="caret"> ▼</span>
+              {user ? user.name || user.email : "Hello Guest"}
+              <span className="caret"> ▼</span>
             </button>
             <div className={`user-dropdown ${userMenuOpen ? "open" : ""}`}>
               {user ? (
                 <>
-                  <div className="dropdown-item user-greeting">{user.name || user.email}</div>
-                  <Link href="/my-account" className="dropdown-item">My Account</Link>
-                  <Link href="/gift-cash" className="dropdown-item">Gift Cash</Link>
-                  <Link href="/orders" className="dropdown-item">My Orders</Link>
-                  <Link href="/contact" className="dropdown-item">Contact Us</Link>
-                  <Link href="/faqs" className="dropdown-item">FAQs</Link>
-                  {user.role === "admin" && <Link href="/admin" className="dropdown-item">Admin Dashboard</Link>}
-                  <button className="dropdown-item logout" onClick={handleLogout}>Logout</button>
+                  <div className="dropdown-item user-greeting">
+                    {user.name || user.email}
+                  </div>
+                  <Link href="/my-account" className="dropdown-item">
+                    My Account
+                  </Link>
+                  <Link href="/gift-cash" className="dropdown-item">
+                    Gift Cash
+                  </Link>
+                  <Link href="/orders" className="dropdown-item">
+                    My Orders
+                  </Link>
+                  <Link href="/contact" className="dropdown-item">
+                    Contact Us
+                  </Link>
+                  <Link href="/faqs" className="dropdown-item">
+                    FAQs
+                  </Link>
+                  {user.role === "admin" && (
+                    <Link href="/admin" className="dropdown-item">
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button
+                    className="dropdown-item logout"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="dropdown-item">Login / Register</Link>
-                  <Link href="/my-account" className="dropdown-item">My Account</Link>
-                  <Link href="/gift-cash" className="dropdown-item">Gift Cash</Link>
-                  <Link href="/orders" className="dropdown-item">My Orders</Link>
-                  <Link href="/contact" className="dropdown-item">Contact Us</Link>
-                  <Link href="/faqs" className="dropdown-item">FAQs</Link>
+                  <Link href="/login" className="dropdown-item">
+                    Login / Register
+                  </Link>
+                  <Link href="/my-account" className="dropdown-item">
+                    My Account
+                  </Link>
+                  <Link href="/gift-cash" className="dropdown-item">
+                    Gift Cash
+                  </Link>
+                  <Link href="/orders" className="dropdown-item">
+                    My Orders
+                  </Link>
+                  <Link href="/contact" className="dropdown-item">
+                    Contact Us
+                  </Link>
+                  <Link href="/faqs" className="dropdown-item">
+                    FAQs
+                  </Link>
                 </>
               )}
             </div>
@@ -186,12 +226,24 @@ const Header: React.FC = () => {
         {/* Dropdown Nav */}
         <nav className={`header-nav ${menuOpen ? "open" : ""}`}>
           <ul className="nav-menu">
-            <li className="nav-item"><Link href="/">Home</Link></li>
-            <li className="nav-item"><Link href="/products">Products</Link></li>
-            <li className="nav-item"><Link href="/testimonials">Reviews</Link></li>
-            <li className="nav-item"><Link href="/about-us">About Us</Link></li>
-            <li className="nav-item"><Link href="/gallery">Gallery</Link></li>
-            <li className="nav-item"><Link href="/inquiry-form">Any Inquiry?</Link></li>
+            <li className="nav-item">
+              <Link href="/">Home</Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/products">Products</Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/testimonials">Reviews</Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/about-us">About Us</Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/gallery">Gallery</Link>
+            </li>
+            <li className="nav-item">
+              <Link href="/inquiry-form">Any Inquiry?</Link>
+            </li>
           </ul>
         </nav>
         {/* Search Bar */}

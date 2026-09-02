@@ -10,15 +10,13 @@ import Testimonials from "@/components/sections/Testimonials";
 import UsefulLinks from "@/components/sections/UsefulLinks";
 import InquiryFormPage from "./inquiry-form";
 import categories from "@/data/catalog";
-import '@/styles/theme.css';
-
+// import "@/styles/theme.css";
 
 export default function Home() {
-  const [searchQuery] = useState('');
-  const [selectedCategory] = useState('');
+  const [searchQuery] = useState("");
+  const [selectedCategory] = useState("");
   return (
     <>
-
       <Hero />
 
       <div id="categories">
@@ -35,20 +33,34 @@ export default function Home() {
           category={selectedCategory || undefined}
           searchQuery={searchQuery || undefined}
           limit={!searchQuery && !selectedCategory ? 6 : undefined}
-          title={searchQuery
-            ? `Results for "${searchQuery}"`
-            : selectedCategory
-              ? `Products by ${selectedCategory}`
-              : "Featured Products"}
+          title={
+            searchQuery
+              ? `Results for "${searchQuery}"`
+              : selectedCategory
+                ? `Products by ${selectedCategory}`
+                : "Featured Products"
+          }
         />
       </div>
 
-      <div id="about-us"><AboutUs /></div>
-      <div id="gallery"><Gallery /></div>
-      <div id="testimonials"><Testimonials /></div>
-      <div id="contact-us"><ContactUs /></div>
-      <div id="get-in-touch"><InquiryFormPage /></div>
-      <div id="useful-links"><UsefulLinks /></div>
+      <div id="about-us">
+        <AboutUs />
+      </div>
+      <div id="gallery">
+        <Gallery />
+      </div>
+      <div id="testimonials">
+        <Testimonials />
+      </div>
+      <div id="contact-us">
+        <ContactUs />
+      </div>
+      <div id="get-in-touch">
+        <InquiryFormPage />
+      </div>
+      <div id="useful-links">
+        <UsefulLinks />
+      </div>
     </>
   );
 }

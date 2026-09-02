@@ -5,7 +5,12 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { OrderTable } from "@/components/admin/orders/OrderTable";
 import { Order } from "@/types/admin";
 
-export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+export type OrderStatus =
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 const AdminOrdersPage: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
@@ -15,11 +20,11 @@ const AdminOrdersPage: React.FC = () => {
 
   // Redirect if not admin
   useEffect(() => {
-      if (!user) {
-        router.push("/login");
-      } else if (user.role !== "admin") {
-        router.push("/"); // or redirect to dashboard/orders page for customer
-      }
+    if (!user) {
+      router.push("/login");
+    } else if (user.role !== "admin") {
+      router.push("/"); // or redirect to dashboard/orders page for customer
+    }
   }, [user]);
 
   // Fetch all orders
@@ -44,9 +49,7 @@ const AdminOrdersPage: React.FC = () => {
   // Handle status update
   const handleStatusChange = async (id: string, status: OrderStatus) => {
     setOrders((prev) =>
-      prev.map((order) =>
-        order.id === id ? { ...order, status } : order
-      )
+      prev.map((order) => (order.id === id ? { ...order, status } : order)),
     );
 
     await fetch(`/api/orders/${id}`, {
@@ -68,7 +71,7 @@ const AdminOrdersPage: React.FC = () => {
   if (!orders.length) return <p>No orders found.</p>;
 
   return (
-    <AdminLayout title="Orders" userRole={user.role === "user" ? "customer" : user.role}>
+    <AdminLayout title="Orders" userRole={user.role}>
       <h1 className="beautiful-title">All Orders</h1>
       <OrderTable
         orders={orders}

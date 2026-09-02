@@ -1,7 +1,7 @@
 // src/pages/sections/AboutUs.tsx
 import React from "react";
 import Image from "next/image";
-import "../../styles/theme.css";
+// import css from "@/styles/theme.css";
 
 export default function AboutUs() {
   return (
@@ -29,10 +29,10 @@ export default function AboutUs() {
             <p className="paragraph">
               Every product is carefully made in-house with a focus on quality,
               creativity, and attention to detail. Since most of our items are
-              homemade and crafted, the production and dispatch process
-              takes a time typically "10–12 days". For this reason, we
-              request that orders be placed at least 15 days in advance to
-              ensure a seamless experience.
+              homemade and crafted, the production and dispatch process takes a
+              time typically "10–12 days". For this reason, we request that
+              orders be placed at least 15 days in advance to ensure a seamless
+              experience.
             </p>
             <p className="paragraph">
               With all-India delivery and a commitment to customer satisfaction,

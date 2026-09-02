@@ -1,7 +1,10 @@
+import "@/styles/globals.css"; // or your global css
+import "@/components/layout/Header.css";
+import "@/styles/theme.css";
+
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { AuthProvider } from '@/context/AuthContext';
-import '@/styles/globals.css'; // or your global css
 import type { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {

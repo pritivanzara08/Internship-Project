@@ -1,26 +1,61 @@
-// import { db } from '@/lib/firebase';
-// import { collection, getDocs, addDoc } from 'firebase/firestore';
-// import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from "@/lib/prisma";
 
-// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-//   const productsRef = collection(db, 'products');
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    if (req.method === "GET") {
+      const products = await prisma.product.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
-//   if (req.method === 'GET') {
-//     const snapshot = await getDocs(productsRef);
-//     const products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-//     return res.status(200).json(products);
-//   }
+      return res.status(200).json(products);
+    }
 
-//   if (req.method === 'POST') {
-//     try {
-//       const product = req.body;
-//       const docRef = await addDoc(productsRef, product);
-//       return res.status(201).json({ id: docRef.id });
-//     } catch (err) {
-//       return res.status(500).json({ message: 'Error creating product', error: err });
-//     }
-//   }
+    if (req.method === "POST") {
+      const {
+        name,
+        description,
+        price,
+        imageUrl,
+        inStock,
+        customizationOptions,
+      } = req.body;
 
-//   res.setHeader('Allow', ['GET', 'POST']);
-//   res.status(405).end(`Method ${req.method} Not Allowed`);
-// }
+      if (!name || price === undefined) {
+        return res.status(400).json({
+          message: "Name and price are required",
+        });
+      }
+
+      const product = await prisma.product.create({
+        data: {
+          name,
+          description,
+          price: Number(price),
+          imageUrl,
+          inStock: inStock ?? true,
+          customizationOptions: customizationOptions ?? undefined,
+        },
+      });
+
+      return res.status(201).json(product);
+    }
+
+    res.setHeader("Allow", ["GET", "POST"]);
+
+    return res.status(405).json({
+      message: `Method ${req.method} Not Allowed`,
+    });
+  } catch (error) {
+    console.error("Admin products API error:", error);
+
+    return res.status(500).json({
+      message: "Failed to process product request",
+    });
+  }
+}

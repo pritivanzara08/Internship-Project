@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import products from "@/data/products";
-import "@/styles/ProductStyles.css";
+// import css from "@/components/product/ProductList.module.css";
 import { Product } from "@/types/admin";
 import Swal from "sweetalert2";
 import { FaShoppingCart } from "react-icons/fa";

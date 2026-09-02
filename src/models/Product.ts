@@ -1,4 +1,3 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
 
 export interface IProduct {
 name: string;
@@ -32,7 +31,3 @@ values: [{ type: String }],
 { timestamps: true }
 );
 
-const Product =
-  (mongoose.models.Product as Model<IProduct>) ||
-  mongoose.model<IProduct>('Product', ProductSchema);
-export default Product;

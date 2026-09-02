@@ -1,4 +1,3 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IOrder extends Document {
   userId: string;
@@ -37,7 +36,4 @@ const OrderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-const Order: Model<IOrder> =
-  mongoose.models.Order || mongoose.model<IOrder>("Order", OrderSchema);
-
-export default Order;
+export default;

@@ -1,33 +1,36 @@
-import React, { use, useCallback, useEffect, useState } from 'react';
-import "../../styles/theme.css";
+import React, { use, useCallback, useEffect, useState } from "react";
+// import "../../styles/theme.module.css";
 
 type Slide = {
   image: string;
   title: string;
   description: string;
-}
+};
 
 const slides: Slide[] = [
   {
     image: "/images/giftbackground.jpg",
     title: "Find Your Perfect Gift Options Here",
-    description: "Explore a wide range of personalized gifts for every occasion."
+    description:
+      "Explore a wide range of personalized gifts for every occasion.",
   },
   {
     image: "/images/hamper.jpg",
     title: "Customized Hampers for Every Occasion",
-    description: "Delight your loved ones with our bespoke gift hampers."
+    description: "Delight your loved ones with our bespoke gift hampers.",
   },
   {
     image: "/images/giftbackground.jpg",
     title: "Searching for the Perfect Gift?",
-    description: "Give us your requirements and we'll find the perfect gift for you!"
+    description:
+      "Give us your requirements and we'll find the perfect gift for you!",
   },
   {
     image: "/images/hamper.jpg",
     title: "For Which Occasion?",
-    description: "Let us help you choose the perfect hamper for your special event."
-  }
+    description:
+      "Let us help you choose the perfect hamper for your special event.",
+  },
   //add more slides as needed
 ];
 
@@ -54,25 +57,28 @@ const Hero: React.FC = () => {
   //keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowLeft') {
+      if (event.key === "ArrowLeft") {
         goPrev();
-      } else if (event.key === 'ArrowRight') {
+      } else if (event.key === "ArrowRight") {
         goNext();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [goPrev, goNext]);
 
   return (
     <section className="hero" aria-label="Hero Carousel">
       <div className="hero-slider" role="region" aria-roledescription="slide">
-        {slides.map((s,i) => (
-          <div key={i} className={i === index ? `slide active` : `slide`}
-            style={{backgroundImage: `url(${s.image})`}}>
+        {slides.map((s, i) => (
+          <div
+            key={i}
+            className={i === index ? `slide active` : `slide`}
+            style={{ backgroundImage: `url(${s.image})` }}
+          >
             <div className="slide-content">
               <h2 className="hero-title">{s.title}</h2>
               {s.description && <p className="subtitle">{s.description}</p>}
@@ -80,17 +86,25 @@ const Hero: React.FC = () => {
           </div>
         ))}
 
-        <button aria-label="Previous Slide" className="arrow-prev" onClick={goPrev}>
+        <button
+          aria-label="Previous Slide"
+          className="arrow-prev"
+          onClick={goPrev}
+        >
           &lt;
         </button>
         <button aria-label="Next Slide" className="arrow-next" onClick={goNext}>
           &gt;
         </button>
 
-        <div className='slider-dots' aria-label='Slide indicators'>
+        <div className="slider-dots" aria-label="Slide indicators">
           {slides.map((_, idx) => (
-            <button key={idx} className={idx === index ? 'dot activeDot' : 'dot'} onClick={() => setIndex(idx)}
-             aria-label={`Go to Slide ${idx + 1}`} />
+            <button
+              key={idx}
+              className={idx === index ? "dot activeDot" : "dot"}
+              onClick={() => setIndex(idx)}
+              aria-label={`Go to Slide ${idx + 1}`}
+            />
           ))}
         </div>
       </div>

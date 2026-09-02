@@ -1,10 +1,10 @@
 import React from "react";
-import "@/styles/theme.css";
+// import "@/styles/theme.css";
 import {
   FaClock,
   FaEnvelope,
   FaMapMarkerAlt,
-  FaPhoneAlt
+  FaPhoneAlt,
 } from "react-icons/fa";
 
 const ContactUs = () => {
@@ -41,7 +41,8 @@ const ContactUs = () => {
             </div>
             <h3>General Enquiries</h3>
             <p>
-              Email: <a href="mailto:info@giftarticle.com">info@giftarticle.com</a>
+              Email:{" "}
+              <a href="mailto:info@giftarticle.com">info@giftarticle.com</a>
             </p>
           </div>
           {/* Call Us */}
@@ -77,7 +78,7 @@ const ContactUs = () => {
         </div>
 
         {/* Inquiry Form */}
-        
+
         <div
           style={{
             display: "flex",
@@ -98,8 +99,6 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-      
-     
     </section>
   );
 };
