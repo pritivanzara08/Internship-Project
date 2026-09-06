@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { loginUser } from '@/lib/auth';
-import '@/styles/login.css';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -59,9 +58,7 @@ const Login: React.FC = () => {
         <p className="auth-switch">
           New here? <a href="/signup">Create an account</a>
         </p>
-        <p className="auth-switch">
-          Already have an account? <a href="/login">Login</a>
-        </p>
+        
       </form>
     </div>
   );

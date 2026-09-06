@@ -1,5 +1,4 @@
 import React from "react";
-import "@/styles/adminLayout.css";
 
 export const AdminHeader: React.FC<{ title?: string }> = ({ title }) => {
     return (
@@ -9,4 +8,3 @@ export const AdminHeader: React.FC<{ title?: string }> = ({ title }) => {
         </header>
     );
 };
-

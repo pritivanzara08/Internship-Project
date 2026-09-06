@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import products from "@/data/products";
 import categories from "@/data/catalog";
 import { Product } from "@/types/admin";
-import "@/styles/ProductStyles.css";
 
 export default function ProductDetailsPage() {
   const router = useRouter();

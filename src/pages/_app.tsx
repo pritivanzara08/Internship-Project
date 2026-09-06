@@ -1,6 +1,11 @@
 import "@/styles/globals.css"; // or your global css
 import "@/components/layout/Header.css";
 import "@/styles/theme.css";
+import "@/styles/login.css";
+import "@/styles/signup.css";
+import "@/styles/cart.css";
+import "@/styles/ProductStyles.css";
+import "@/styles/adminLayout.css";
 
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';

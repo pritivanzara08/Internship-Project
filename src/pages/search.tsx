@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { useState, useMemo } from "react";
 import products from "@/data/products";
 import ProductCard from "@/components/shop/ProductCard";
-import "@/components/layout/Header.css"
 
 export default function SearchPage() {
     const router = useRouter();

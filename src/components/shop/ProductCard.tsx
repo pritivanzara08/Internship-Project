@@ -1,6 +1,5 @@
 // src/components/shop/ProductCard.tsx
 import { Product } from "@/types/admin";
-import "@/styles/ProductStyles.css";
 
 interface ProductCardProps {
   product: Product;

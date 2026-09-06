@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
-import "@/styles/adminLayout.css";
 
 interface DashboardData {
   usersCount: number;

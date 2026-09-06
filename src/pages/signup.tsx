@@ -1,4 +1,3 @@
-import '@/styles/signup.css';
 import { sendOtp, verifyOtp } from "@/utils/otpApi";
 import Link from 'next/link';
 import { useRouter } from 'next/router';

@@ -6,6 +6,7 @@ node_modules/
 out/
 
 # local env files
+.env
 .env.local
 .env.*.local
 

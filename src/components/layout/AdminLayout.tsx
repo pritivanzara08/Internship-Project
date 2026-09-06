@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import "@/styles/adminLayout.css";
 
 interface Props {
   title?: string;

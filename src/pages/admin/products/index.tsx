@@ -4,7 +4,6 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 import { Product } from "@/types/admin";
 import productsData from "@/data/products";
 
-import "@/styles/adminLayout.css"; // import CSS
 import { ProductForm } from "@/components/admin/products/ProductForm";
 import { ProductTable } from "@/components/admin/products/ProductTable";
 

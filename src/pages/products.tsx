@@ -3,7 +3,6 @@ import { NextPage } from 'next';
 import ProductCard from '@/components/shop/ProductCard';
 import products from '@/data/products'; // adjust path if needed
 import { Product } from '@/types/admin';
-import '@/styles/ProductStyles.css';
 import Swal from 'sweetalert2';
 
 const ProductsPage: NextPage = () => {

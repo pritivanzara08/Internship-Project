@@ -4,7 +4,7 @@ import ProductCard from "@/components/shop/ProductCard";
 import { Product } from "@/types/admin";
 import productsData from "@/data/products";
 import categories from "@/data/catalog";
-// import "@/styles/theme.css";
+// 
 
 const ITEMS_PER_PAGE = 6;
 

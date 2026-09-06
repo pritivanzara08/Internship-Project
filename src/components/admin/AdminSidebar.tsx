@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import "@/styles/adminLayout.css";
 
 type NavItem = { label: string; href: string; roles: ("admin" | "customer")[] };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import "@/styles/adminLayout.css";
 
 type Widget = { title: string; value: string; delta?: string };
 
